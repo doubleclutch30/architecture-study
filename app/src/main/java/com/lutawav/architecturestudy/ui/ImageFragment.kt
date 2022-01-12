@@ -1,0 +1,7 @@
+package com.lutawav.architecturestudy.ui
+
+import androidx.fragment.app.Fragment
+import com.lutawav.architecturestudy.R
+
+class ImageFragment : Fragment(R.layout.fragment_image) {
+}

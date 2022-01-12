@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_main" >
+
+    <fragment
+        android:id="@+id/movieFragment"
+        android:name="com.lutawav.architecturestudy.ui.MovieFragment"
+        android:label="fragment_movie"
+        tools:layout="@layout/fragment_movie"/>
+
+    <fragment
+        android:id="@+id/blogFragment"
+        android:name="com.lutawav.architecturestudy.ui.BlogFragment"
+        android:label="BlogFragment"
+        tools:layout="@layout/fragment_blog"/>
+
+    <fragment
+        android:id="@+id/imageFragment"
+        android:name="com.lutawav.architecturestudy.ui.ImageFragment"
+        android:label="ImageFragment"
+        tools:layout="@layout/fragment_image"/>
+
+
+
+</navigation>
