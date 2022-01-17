@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -27,7 +28,7 @@ class MovieFragment : Fragment(R.layout.fragment_movie) {
         super.onViewCreated(view, savedInstanceState)
 
         initViews()
-        search("바람")
+        bindViews()
     }
 
     override fun onCreateView(
@@ -39,11 +40,23 @@ class MovieFragment : Fragment(R.layout.fragment_movie) {
         .root
 
     private fun initViews() {
+        movieAdapter = MovieAdapter()
         binding?.movieRecyclerView?.apply {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-            adapter = MovieAdapter()
+            adapter = movieAdapter
             itemAnimator = DefaultItemAnimator()
             addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
+        }
+    }
+
+    private fun bindViews() {
+        binding?.searchButton?.setOnClickListener {
+            val keyword = binding?.searchEditText?.text.toString().trim()
+            if (keyword.isBlank()) {
+                Toast.makeText(activity, "검색어를 입력해주세요", Toast.LENGTH_SHORT).show()
+            } else {
+                search(keyword)
+            }
         }
     }
 
@@ -66,7 +79,5 @@ class MovieFragment : Fragment(R.layout.fragment_movie) {
                 }
             })
     }
-
-
 
 }

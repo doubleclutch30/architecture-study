@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="스파이더맨 노웨이 홈" />
 
-    <androidx.appcompat.widget.AppCompatRatingBar
+    <RatingBar
         android:id="@+id/user_rating"
         style="@style/Widget.AppCompat.RatingBar.Indicator"
         android:layout_width="0dp"

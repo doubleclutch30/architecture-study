@@ -25,6 +25,9 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
                     .load(movie.image)
                     .into(binding.movieImage)
 
+                binding.userRating.rating = movie.userRating
+
+
                 binding.root.setOnClickListener {
 
                 }
