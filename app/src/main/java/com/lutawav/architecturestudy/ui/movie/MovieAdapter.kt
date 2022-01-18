@@ -8,6 +8,7 @@ import com.lutawav.architecturestudy.data.Movie
 import com.lutawav.architecturestudy.databinding.ItemMovieBinding
 import com.lutawav.architecturestudy.ui.BaseAdapter
 import com.lutawav.architecturestudy.ui.BaseViewHolder
+import com.lutawav.architecturestudy.util.startWebView
 
 internal class MovieAdapter : BaseAdapter<Movie, MovieViewHolder>() {
 
@@ -39,9 +40,8 @@ internal class MovieViewHolder(
 
         binding.userRating.rating = movie.userRating
 
-
-        binding.root.setOnClickListener {
-
+        binding.root.setOnClickListener { view ->
+            view.startWebView(movie.link)
         }
     }
 }

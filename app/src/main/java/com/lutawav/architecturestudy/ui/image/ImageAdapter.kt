@@ -2,12 +2,12 @@ package com.lutawav.architecturestudy.ui.image
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.lutawav.architecturestudy.data.Image
 import com.lutawav.architecturestudy.databinding.ItemImageBinding
 import com.lutawav.architecturestudy.ui.BaseAdapter
 import com.lutawav.architecturestudy.ui.BaseViewHolder
+import com.lutawav.architecturestudy.util.startWebView
 
 internal class ImageAdapter : BaseAdapter<Image, ImageViewHolder>() {
 
@@ -31,6 +31,10 @@ internal class ImageViewHolder(private val binding: ItemImageBinding) :
         Glide.with(binding.imageThumbnail.context)
             .load(image.thumbnail)
             .into(binding.imageThumbnail)
+
+        binding.root.setOnClickListener { view ->
+            view.startWebView(image.link)
+        }
     }
 
 }

@@ -3,11 +3,11 @@ package com.lutawav.architecturestudy.ui.blog
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
-import androidx.recyclerview.widget.RecyclerView
 import com.lutawav.architecturestudy.data.Blog
 import com.lutawav.architecturestudy.databinding.ItemBlogBinding
 import com.lutawav.architecturestudy.ui.BaseAdapter
 import com.lutawav.architecturestudy.ui.BaseViewHolder
+import com.lutawav.architecturestudy.util.startWebView
 
 internal class BlogAdapter : BaseAdapter<Blog, BlogViewHolder>() {
 
@@ -32,5 +32,9 @@ internal class BlogViewHolder(private val binding: ItemBlogBinding) :
             HtmlCompat.fromHtml(blog.description, HtmlCompat.FROM_HTML_MODE_COMPACT)
         binding.blogOwner.text = blog.bloggerName
         binding.blogPostdate.text = blog.postdate
+
+        binding.root.setOnClickListener { view ->
+            view.startWebView(blog.link)
+        }
     }
 }

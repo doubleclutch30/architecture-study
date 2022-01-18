@@ -1,12 +1,9 @@
 package com.lutawav.architecturestudy.ui
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.lutawav.architecturestudy.databinding.ItemImageBinding
 
-abstract class BaseAdapter<T, H: BaseViewHolder<T>>()
+abstract class BaseAdapter<T, H: BaseViewHolder<T>>
     : RecyclerView.Adapter<H>() {
     private val items: MutableList<T> = mutableListOf()
 
@@ -22,7 +19,6 @@ abstract class BaseAdapter<T, H: BaseViewHolder<T>>()
         this.items.addAll(items)
         notifyDataSetChanged()
     }
-
 }
 
 abstract class BaseViewHolder<T>(
