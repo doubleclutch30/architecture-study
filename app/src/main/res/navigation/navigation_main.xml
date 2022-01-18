@@ -6,19 +6,19 @@
 
     <fragment
         android:id="@+id/movieFragment"
-        android:name="com.lutawav.architecturestudy.ui.MovieFragment"
+        android:name="com.lutawav.architecturestudy.ui.movie.MovieFragment"
         android:label="fragment_movie"
         tools:layout="@layout/fragment_movie"/>
 
     <fragment
         android:id="@+id/blogFragment"
-        android:name="com.lutawav.architecturestudy.ui.BlogFragment"
+        android:name="com.lutawav.architecturestudy.ui.blog.BlogFragment"
         android:label="BlogFragment"
         tools:layout="@layout/fragment_blog"/>
 
     <fragment
         android:id="@+id/imageFragment"
-        android:name="com.lutawav.architecturestudy.ui.ImageFragment"
+        android:name="com.lutawav.architecturestudy.ui.image.ImageFragment"
         android:label="ImageFragment"
         tools:layout="@layout/fragment_image"/>
 

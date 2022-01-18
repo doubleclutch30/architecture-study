@@ -7,6 +7,7 @@ import okhttp3.Response
 import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 import java.nio.charset.Charset
 import java.util.concurrent.TimeUnit
 
@@ -17,15 +18,9 @@ object ApiClient {
 
     private const val BASE_URL = "https://openapi.naver.com"
 
-    private var apiService: ApiService? = null
+    private val apiService: ApiService = getRetrofit(BASE_URL).create()
 
-    fun getApiService(): ApiService {
-        val service = apiService
-            ?: getRetrofit(BASE_URL)
-                .create(ApiService::class.java)
-        apiService = service
-        return service
-    }
+    fun getApiService() = apiService
 
     private fun getRetrofit(baseUrl: String): Retrofit {
         val builder = OkHttpClient.Builder()
@@ -47,8 +42,6 @@ object ApiClient {
         ): Response {
             val original = chain.request()
             val request = original.newBuilder().apply {
-                addHeader("Accept", "application/json")
-                addHeader("Content-Type", "application/json")
                 addHeader("X-Naver-Client-Id", "tr6M7jBKez2OeO2BOXSg")
                 addHeader("X-Naver-Client-Secret", "S_DUMEv030")
             }.build()

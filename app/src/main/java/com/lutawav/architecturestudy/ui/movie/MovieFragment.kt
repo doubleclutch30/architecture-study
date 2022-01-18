@@ -1,30 +1,29 @@
-package com.lutawav.architecturestudy.ui
+package com.lutawav.architecturestudy.ui.movie
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.lutawav.architecturestudy.R
-import com.lutawav.architecturestudy.data.BlogResponse
-import com.lutawav.architecturestudy.data.MovieResponse
-import com.lutawav.architecturestudy.databinding.FragmentBlogBinding
+import com.lutawav.architecturestudy.data.Movie
+import com.lutawav.architecturestudy.data.NaverQueryResponse
 import com.lutawav.architecturestudy.databinding.FragmentMovieBinding
 import com.lutawav.architecturestudy.network.NaverApi
+import com.lutawav.architecturestudy.ui.BaseFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class BlogFragment : Fragment(R.layout.fragment_blog) {
+class MovieFragment : BaseFragment<FragmentMovieBinding>() {
 
-    private var binding: FragmentBlogBinding? = null
-    private lateinit var blogAdapter: BlogAdapter
+    private lateinit var movieAdapter: MovieAdapter
+
+
+    override fun getViewBinding(): FragmentMovieBinding =
+        FragmentMovieBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,27 +32,19 @@ class BlogFragment : Fragment(R.layout.fragment_blog) {
         bindViews()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = FragmentBlogBinding.inflate(inflater, container, false)
-        .also { binding = it}
-        .root
-
     private fun initViews() {
-        blogAdapter = BlogAdapter()
-        binding?.blogRecyclerView?.apply {
+        movieAdapter = MovieAdapter()
+        binding.movieRecyclerView.apply {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-            adapter = blogAdapter
+            adapter = movieAdapter
             itemAnimator = DefaultItemAnimator()
             addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
         }
     }
 
     private fun bindViews() {
-        binding?.searchButton?.setOnClickListener {
-            val keyword = binding?.searchEditText?.text.toString().trim()
+        binding.searchButton.setOnClickListener {
+            val keyword = binding.searchEditText.text.toString().trim()
             if (keyword.isBlank()) {
                 Toast.makeText(activity, "검색어를 입력해주세요", Toast.LENGTH_SHORT).show()
             } else {
@@ -62,20 +53,21 @@ class BlogFragment : Fragment(R.layout.fragment_blog) {
         }
     }
 
-    private fun search(query: String) {
-        NaverApi.getBlog(query)
-            .enqueue(object : Callback<BlogResponse> {
+
+    override fun search(keyword: String) {
+        NaverApi.getMovies(keyword)
+            .enqueue(object : Callback<NaverQueryResponse<Movie>> {
                 override fun onResponse(
-                    call: Call<BlogResponse>,
-                    response: Response<BlogResponse>
+                    call: Call<NaverQueryResponse<Movie>>,
+                    response: Response<NaverQueryResponse<Movie>>
                 ) {
                     if (response.isSuccessful) {
                         val body = response.body() ?: return
-                        blogAdapter.setItems(body.blogs)
+                        movieAdapter.setData(body.items)
                     }
                 }
 
-                override fun onFailure(call: Call<BlogResponse>, t: Throwable) {
+                override fun onFailure(call: Call<NaverQueryResponse<Movie>>, t: Throwable) {
                     Log.e("Movie", "error=${t.message}")
                 }
             })

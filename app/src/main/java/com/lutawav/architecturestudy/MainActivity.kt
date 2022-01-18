@@ -3,14 +3,10 @@ package com.lutawav.architecturestudy
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationBarView
-import com.lutawav.architecturestudy.databinding.ActivityMainBinding
-import com.lutawav.architecturestudy.databinding.FragmentMovieBinding
-import com.lutawav.architecturestudy.ui.BlogFragment
-import com.lutawav.architecturestudy.ui.ImageFragment
-import com.lutawav.architecturestudy.ui.MovieFragment
+import com.lutawav.architecturestudy.ui.blog.BlogFragment
+import com.lutawav.architecturestudy.ui.image.ImageFragment
+import com.lutawav.architecturestudy.ui.movie.MovieFragment
 
 class MainActivity : AppCompatActivity() {
 

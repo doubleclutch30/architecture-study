@@ -2,11 +2,13 @@ package com.lutawav.architecturestudy.data
 
 import com.google.gson.annotations.SerializedName
 
-data class MovieResponse(
-    val display: Int,
+data class NaverQueryResponse<T>(
+    @SerializedName("lastBuildDate")
     val lastBuildDate: String,
-    val start: Int,
+    @SerializedName("total")
     val total: Int,
+    @SerializedName("display")
+    val display: Int,
     @SerializedName("items")
-    val movies: List<Movie>
+    val items: List<T>
 )
