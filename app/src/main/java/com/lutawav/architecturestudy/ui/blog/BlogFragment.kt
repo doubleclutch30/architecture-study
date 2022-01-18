@@ -8,8 +8,10 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.lutawav.architecturestudy.data.Blog
-import com.lutawav.architecturestudy.data.NaverQueryResponse
+import com.lutawav.architecturestudy.data.model.Blog
+import com.lutawav.architecturestudy.data.model.NaverQueryResponse
+import com.lutawav.architecturestudy.data.repository.NaverSearchRepository
+import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
 import com.lutawav.architecturestudy.databinding.FragmentBlogBinding
 import com.lutawav.architecturestudy.network.NaverApi
 import com.lutawav.architecturestudy.ui.BaseFragment
@@ -24,6 +26,8 @@ class BlogFragment : BaseFragment<FragmentBlogBinding>() {
 
     override fun getViewBinding(): FragmentBlogBinding =
         FragmentBlogBinding.inflate(layoutInflater)
+
+    private val naverSearchRepository by lazy { NaverSearchRepositoryImpl() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,21 +58,14 @@ class BlogFragment : BaseFragment<FragmentBlogBinding>() {
     }
 
     override fun search(keyword: String) {
-        NaverApi.getBlog(keyword)
-            .enqueue(object : Callback<NaverQueryResponse<Blog>> {
-                override fun onResponse(
-                    call: Call<NaverQueryResponse<Blog>>,
-                    response: Response<NaverQueryResponse<Blog>>
-                ) {
-                    if (response.isSuccessful) {
-                        val body = response.body() ?: return
-                        blogAdapter.setData(body.items)
-                    }
-                }
-
-                override fun onFailure(call: Call<NaverQueryResponse<Blog>>, t: Throwable) {
-                    Log.e("Movie", "error=${t.message}")
-                }
-            })
+        naverSearchRepository.getBlog(
+            keyword = keyword,
+            success = { responseImage ->
+                blogAdapter.setData(responseImage.blogs)
+            },
+            fail = { e ->
+                Log.e("Image", "error=${e.message}")
+            }
+        )
     }
 }

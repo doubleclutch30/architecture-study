@@ -1,4 +1,4 @@
-package com.lutawav.architecturestudy.data
+package com.lutawav.architecturestudy.data.model
 
 import com.google.gson.annotations.SerializedName
 
@@ -16,3 +16,7 @@ data class Movie (
     val userRating: Float
         get() = _userRating.toFloat() / 2
 }
+
+data class ResponseMovie(
+    val movies: List<Movie>
+)

@@ -8,8 +8,10 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.lutawav.architecturestudy.data.Movie
-import com.lutawav.architecturestudy.data.NaverQueryResponse
+import com.lutawav.architecturestudy.data.model.Movie
+import com.lutawav.architecturestudy.data.model.NaverQueryResponse
+import com.lutawav.architecturestudy.data.repository.NaverSearchRepository
+import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
 import com.lutawav.architecturestudy.databinding.FragmentMovieBinding
 import com.lutawav.architecturestudy.network.NaverApi
 import com.lutawav.architecturestudy.ui.BaseFragment
@@ -21,9 +23,10 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>() {
 
     private lateinit var movieAdapter: MovieAdapter
 
-
     override fun getViewBinding(): FragmentMovieBinding =
         FragmentMovieBinding.inflate(layoutInflater)
+
+    private val naverSearchRepository by lazy { NaverSearchRepositoryImpl() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -55,21 +58,14 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>() {
 
 
     override fun search(keyword: String) {
-        NaverApi.getMovies(keyword)
-            .enqueue(object : Callback<NaverQueryResponse<Movie>> {
-                override fun onResponse(
-                    call: Call<NaverQueryResponse<Movie>>,
-                    response: Response<NaverQueryResponse<Movie>>
-                ) {
-                    if (response.isSuccessful) {
-                        val body = response.body() ?: return
-                        movieAdapter.setData(body.items)
-                    }
-                }
-
-                override fun onFailure(call: Call<NaverQueryResponse<Movie>>, t: Throwable) {
-                    Log.e("Movie", "error=${t.message}")
-                }
-            })
+        naverSearchRepository.getMovie(
+            keyword = keyword,
+            success = { responseMovie ->
+                movieAdapter.setData(responseMovie.movies)
+            },
+            fail = { e ->
+                Log.e("Movie", "error=${e.message}")
+            }
+        )
     }
 }

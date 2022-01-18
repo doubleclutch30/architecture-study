@@ -5,8 +5,9 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.*
-import com.lutawav.architecturestudy.data.Image
-import com.lutawav.architecturestudy.data.NaverQueryResponse
+import com.lutawav.architecturestudy.data.model.Image
+import com.lutawav.architecturestudy.data.model.NaverQueryResponse
+import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
 import com.lutawav.architecturestudy.databinding.FragmentImageBinding
 import com.lutawav.architecturestudy.network.NaverApi
 import com.lutawav.architecturestudy.ui.BaseFragment
@@ -20,6 +21,8 @@ class ImageFragment : BaseFragment<FragmentImageBinding>() {
 
     override fun getViewBinding(): FragmentImageBinding =
         FragmentImageBinding.inflate(layoutInflater)
+
+    private val naverSearchRepository by lazy { NaverSearchRepositoryImpl() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,22 +53,15 @@ class ImageFragment : BaseFragment<FragmentImageBinding>() {
     }
 
     override fun search(keyword: String) {
-        NaverApi.getImage(keyword)
-            .enqueue(object : Callback<NaverQueryResponse<Image>> {
-                override fun onResponse(
-                    call: Call<NaverQueryResponse<Image>>,
-                    response: Response<NaverQueryResponse<Image>>
-                ) {
-                    if (response.isSuccessful) {
-                        val body = response.body() ?: return
-                        imageAdapter.setData(body.items)
-                    }
-                }
-
-                override fun onFailure(call: Call<NaverQueryResponse<Image>>, t: Throwable) {
-                    Log.e("Movie", "error=${t.message}")
-                }
-            })
+        naverSearchRepository.getImage(
+            keyword = keyword,
+            success = { responseImage ->
+                imageAdapter.setData(responseImage.images)
+            },
+            fail = { e ->
+                Log.e("Image", "error=${e.message}")
+            }
+        )
     }
 
 

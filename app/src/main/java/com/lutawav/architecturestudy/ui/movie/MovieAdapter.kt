@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
 import com.bumptech.glide.Glide
-import com.lutawav.architecturestudy.data.Movie
+import com.lutawav.architecturestudy.data.model.Movie
 import com.lutawav.architecturestudy.databinding.ItemMovieBinding
 import com.lutawav.architecturestudy.ui.BaseAdapter
 import com.lutawav.architecturestudy.ui.BaseViewHolder

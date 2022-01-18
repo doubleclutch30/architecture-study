@@ -3,7 +3,7 @@ package com.lutawav.architecturestudy.ui.blog
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
-import com.lutawav.architecturestudy.data.Blog
+import com.lutawav.architecturestudy.data.model.Blog
 import com.lutawav.architecturestudy.databinding.ItemBlogBinding
 import com.lutawav.architecturestudy.ui.BaseAdapter
 import com.lutawav.architecturestudy.ui.BaseViewHolder

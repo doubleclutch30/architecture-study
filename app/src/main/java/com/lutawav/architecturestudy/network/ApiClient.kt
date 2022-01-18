@@ -18,9 +18,7 @@ object ApiClient {
 
     private const val BASE_URL = "https://openapi.naver.com"
 
-    private val apiService: ApiService = getRetrofit(BASE_URL).create()
-
-    fun getApiService() = apiService
+    val apiService: ApiService = getRetrofit(BASE_URL).create()
 
     private fun getRetrofit(baseUrl: String): Retrofit {
         val builder = OkHttpClient.Builder()
@@ -51,6 +49,7 @@ object ApiClient {
             if (statusCode == 200) {
                 Log.i("ApiClient", "res=${response}, body=${getPeekBody(response.body)}")
             }
+
             return response
         }
     }

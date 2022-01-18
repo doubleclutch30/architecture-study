@@ -1,4 +1,4 @@
-package com.lutawav.architecturestudy.data
+package com.lutawav.architecturestudy.data.model
 
 import com.google.gson.annotations.SerializedName
 

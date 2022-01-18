@@ -3,7 +3,7 @@ package com.lutawav.architecturestudy.ui.image
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
-import com.lutawav.architecturestudy.data.Image
+import com.lutawav.architecturestudy.data.model.Image
 import com.lutawav.architecturestudy.databinding.ItemImageBinding
 import com.lutawav.architecturestudy.ui.BaseAdapter
 import com.lutawav.architecturestudy.ui.BaseViewHolder
