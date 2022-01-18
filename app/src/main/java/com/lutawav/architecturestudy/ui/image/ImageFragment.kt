@@ -4,10 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.lutawav.architecturestudy.data.Image
 import com.lutawav.architecturestudy.data.NaverQueryResponse
 import com.lutawav.architecturestudy.databinding.FragmentImageBinding
@@ -34,7 +31,7 @@ class ImageFragment : BaseFragment<FragmentImageBinding>() {
     private fun initViews() {
         imageAdapter = ImageAdapter()
         binding.imageRecyclerView.apply {
-            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
             adapter = imageAdapter
             itemAnimator = DefaultItemAnimator()
             addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
