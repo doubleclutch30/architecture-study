@@ -3,4 +3,6 @@
     <string name="movie">영화</string>
     <string name="blog">블로그</string>
     <string name="image">사진</string>
+    <string name="search">검색</string>
+    <string name="warn_input_keyword">검색어를 입력해 주세요.</string>
 </resources>
