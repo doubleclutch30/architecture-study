@@ -1,14 +1,13 @@
 package com.lutawav.architecturestudy.network
 
 import android.util.Log
+import com.lutawav.architecturestudy.util.peekBody
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
-import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
-import java.nio.charset.Charset
 import java.util.concurrent.TimeUnit
 
 object ApiClient {
@@ -47,20 +46,14 @@ object ApiClient {
             val response = chain.proceed(request)
             val statusCode = response.code
             if (statusCode == 200) {
-                Log.i("ApiClient", "res=${response}, body=${getPeekBody(response.body)}")
+                Log.i("ApiClient", "res=${response}, body=${response.peekBody()}")
             }
+
+            NetworkException.create(response)?.run { throw this }
 
             return response
         }
     }
 
-    private fun getPeekBody(body: ResponseBody?): String {
-        return body?.let {
-            val source = it.source()
-            source.request(Long.MAX_VALUE)
-            val buffer = source.buffer()
-            buffer.clone().readString(Charset.forName("UTF-8"))
-        } ?: ""
-    }
 
 }
