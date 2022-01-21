@@ -2,7 +2,6 @@ package com.lutawav.architecturestudy.ui.image
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
@@ -54,21 +53,20 @@ class ImageFragment : BaseFragment<FragmentImageBinding>(), ImageContract.View {
     }
 
     override fun showEmptyResultView() {
-        empty_result_view.isVisible = true
+        binding.emptyResultView.visibility = View.VISIBLE
     }
 
     override fun showResultListView() {
-        movie_RecyclerView.isVisible = true
+        binding.imageRecyclerView.visibility = View.VISIBLE
     }
 
     override fun hideEmptyResultView() {
-        empty_result_view.isVisible = false
+        binding.emptyResultView.visibility = View.GONE
     }
 
     override fun hideResultListView() {
-        movie_RecyclerView.isVisible = false
+        binding.imageRecyclerView.visibility = View.GONE
     }
-
 
     override fun search(keyword: String) {
         presenter.search(keyword)

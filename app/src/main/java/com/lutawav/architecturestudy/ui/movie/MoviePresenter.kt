@@ -13,6 +13,14 @@ class MoviePresenter(
             keyword = keyword
         )
             .subscribe({ responseMovie ->
+                val movies = responseMovie.movies
+                if (movies.isEmpty()) {
+                    view.hideResultListView()
+                    view.showEmptyResultView()
+                } else {
+                    view.hideEmptyResultView()
+                    view.showResultListView()
+                }
                 view.updateResult(responseMovie.movies)
             }, { e ->
                 handleError(e)

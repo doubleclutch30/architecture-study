@@ -13,6 +13,14 @@ class BlogPresenter(
             keyword = keyword,
         )
             .subscribe({ responseBlog ->
+                val blogs = responseBlog.blogs
+                if (blogs.isEmpty()) {
+                    view.hideResultListView()
+                    view.showEmptyResultView()
+                } else {
+                    view.hideEmptyResultView()
+                    view.showResultListView()
+                }
                 view.updateResult(responseBlog.blogs)
             }, { e ->
                 handleError(e)

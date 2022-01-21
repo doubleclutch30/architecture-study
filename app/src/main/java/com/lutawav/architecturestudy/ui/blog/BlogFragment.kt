@@ -3,6 +3,7 @@ package com.lutawav.architecturestudy.ui.blog
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +13,9 @@ import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
 import com.lutawav.architecturestudy.databinding.FragmentBlogBinding
 import com.lutawav.architecturestudy.ui.BaseFragment
 import kotlinx.android.synthetic.main.fragment_blog.*
+import kotlinx.android.synthetic.main.fragment_blog.search_bar
+import kotlinx.android.synthetic.main.fragment_image.*
+import kotlinx.android.synthetic.main.fragment_movie.*
 
 
 class BlogFragment : BaseFragment<FragmentBlogBinding>(), BlogContract.View {
@@ -53,19 +57,19 @@ class BlogFragment : BaseFragment<FragmentBlogBinding>(), BlogContract.View {
     }
 
     override fun showEmptyResultView() {
-        empty_result_view.isVisible = true
+        binding.emptyResultView.visibility = View.VISIBLE
     }
 
     override fun showResultListView() {
-        movie_RecyclerView.isVisible = true
+        binding.blogRecyclerView.visibility = View.VISIBLE
     }
 
     override fun hideEmptyResultView() {
-        empty_result_view.isVisible = false
+        binding.emptyResultView.visibility = View.GONE
     }
 
     override fun hideResultListView() {
-        movie_RecyclerView.isVisible = false
+        binding.blogRecyclerView.visibility = View.GONE
     }
 
     override fun search(keyword: String) {

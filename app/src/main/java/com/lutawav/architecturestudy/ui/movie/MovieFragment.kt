@@ -2,7 +2,6 @@ package com.lutawav.architecturestudy.ui.movie
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,9 +10,9 @@ import com.lutawav.architecturestudy.data.model.Movie
 import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
 import com.lutawav.architecturestudy.databinding.FragmentMovieBinding
 import com.lutawav.architecturestudy.ui.BaseFragment
-import kotlinx.android.synthetic.main.fragment_movie.*
+import kotlinx.android.synthetic.main.fragment_movie.   *
 
-class MovieFragment : BaseFragment<FragmentMovieBinding>(), MovieContract.View{
+class MovieFragment : BaseFragment<FragmentMovieBinding>(), MovieContract.View {
 
     override val presenter: MovieContract.Presenter by lazy {
         MoviePresenter(this, naverSearchRepository)
@@ -54,19 +53,19 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>(), MovieContract.View{
     }
 
     override fun showEmptyResultView() {
-        empty_result_view.isVisible = true
+        binding.emptyResultView.visibility = View.VISIBLE
     }
 
     override fun showResultListView() {
-        movie_RecyclerView.isVisible = true
+        binding.movieRecyclerView.visibility = View.VISIBLE
     }
 
     override fun hideEmptyResultView() {
-        empty_result_view.isVisible = false
+        binding.emptyResultView.visibility = View.GONE
     }
 
     override fun hideResultListView() {
-        movie_RecyclerView.isVisible = false
+        binding.movieRecyclerView.visibility = View.GONE
     }
 
     override fun search(keyword: String) {
