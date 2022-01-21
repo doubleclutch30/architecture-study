@@ -5,46 +5,33 @@ import com.lutawav.architecturestudy.data.model.ResponseImage
 import com.lutawav.architecturestudy.data.model.ResponseMovie
 import com.lutawav.architecturestudy.data.source.remote.NaverSearchRemoteDataSource
 import com.lutawav.architecturestudy.data.source.remote.NaverSearchRemoteDataSourceImpl
+import io.reactivex.Single
 
-class NaverSearchRepositoryImpl: NaverSearchRepository {
+class NaverSearchRepositoryImpl : NaverSearchRepository {
 
     override val naverSearchRemoteDataSource: NaverSearchRemoteDataSource by lazy {
         NaverSearchRemoteDataSourceImpl()
     }
 
     override fun getMovie(
-        keyword: String,
-        success: (ResponseMovie) -> Unit,
-        fail: (Throwable) -> Unit
-    ) {
+        keyword: String
+    ): Single<ResponseMovie> =
         naverSearchRemoteDataSource.getMovie(
-            keyword = keyword,
-            success = success,
-            fail = fail
+            keyword = keyword
         )
-    }
 
     override fun getBlog(
-        keyword: String,
-        success: (ResponseBlog) -> Unit,
-        fail: (Throwable) -> Unit
-    ) {
+        keyword: String
+    ): Single<ResponseBlog> =
         naverSearchRemoteDataSource.getBlog(
-            keyword = keyword,
-            success = success,
-            fail = fail
+            keyword = keyword
         )
-    }
 
     override fun getImage(
-        keyword: String,
-        success: (ResponseImage) -> Unit,
-        fail: (Throwable) -> Unit
-    ) {
+        keyword: String
+    ): Single<ResponseImage> =
         naverSearchRemoteDataSource.getImage(
-            keyword = keyword,
-            success = success,
-            fail = fail
+            keyword = keyword
         )
-    }
+
 }

@@ -8,12 +8,11 @@ import io.reactivex.Single
 
 interface NaverSearchRepository {
 
-
     val naverSearchRemoteDataSource: NaverSearchRemoteDataSource
 
-    fun getMovie(keyword: String, success: (ResponseMovie) -> Unit, fail: (Throwable) -> Unit)
+    fun getMovie(keyword: String) : Single<ResponseMovie>
 
-    fun getBlog(keyword: String, success: (ResponseBlog) -> Unit, fail: (Throwable) -> Unit)
+    fun getBlog(keyword: String) : Single<ResponseBlog>
 
-    fun getImage(keyword: String, success: (ResponseImage) -> Unit, fail: (Throwable) -> Unit)
+    fun getImage(keyword: String) : Single<ResponseImage>
 }
