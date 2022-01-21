@@ -1,10 +1,10 @@
 package com.lutawav.architecturestudy.data.repository
 
-import com.lutawav.architecturestudy.data.model.Movie
 import com.lutawav.architecturestudy.data.model.ResponseBlog
 import com.lutawav.architecturestudy.data.model.ResponseImage
 import com.lutawav.architecturestudy.data.model.ResponseMovie
 import com.lutawav.architecturestudy.data.source.remote.NaverSearchRemoteDataSource
+import io.reactivex.Single
 
 interface NaverSearchRepository {
 

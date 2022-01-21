@@ -1,8 +1,6 @@
 package com.lutawav.architecturestudy.ui.movie
 
-import com.lutawav.architecturestudy.data.repository.NaverSearchRepository
 import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
-import com.lutawav.architecturestudy.ui.BaseSearchContract
 import com.lutawav.architecturestudy.ui.BaseSearchPresenter
 
 class MoviePresenter(
@@ -12,11 +10,11 @@ class MoviePresenter(
 
     override fun search(keyword: String) {
         repository.getMovie(
-            keyword = keyword,
-            success = { responseMovie ->
+            keyword = keyword
+        )
+            .subscribe({ responseMovie ->
                 view.updateResult(responseMovie.movies)
-            },
-            fail = { e ->
+            }, { e ->
                 handleError(e)
             }
         )
