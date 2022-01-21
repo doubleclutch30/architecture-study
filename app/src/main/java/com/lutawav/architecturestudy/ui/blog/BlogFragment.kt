@@ -1,19 +1,24 @@
 package com.lutawav.architecturestudy.ui.blog
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.lutawav.architecturestudy.data.model.Blog
 import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
 import com.lutawav.architecturestudy.databinding.FragmentBlogBinding
 import com.lutawav.architecturestudy.ui.BaseFragment
-import kotlinx.android.synthetic.main.fragment_movie.*
+import kotlinx.android.synthetic.main.fragment_blog.*
 
-class BlogFragment : BaseFragment<FragmentBlogBinding>() {
 
+class BlogFragment : BaseFragment<FragmentBlogBinding>(), BlogContract.View {
+
+    override val presenter: BlogContract.Presenter by lazy {
+        BlogPresenter(this, naverSearchRepository)
+    }
 
     private lateinit var blogAdapter: BlogAdapter
 
@@ -43,14 +48,15 @@ class BlogFragment : BaseFragment<FragmentBlogBinding>() {
     }
 
     override fun search(keyword: String) {
-        naverSearchRepository.getBlog(
-            keyword = keyword,
-            success = { responseImage ->
-                blogAdapter.setData(responseImage.blogs)
-            },
-            fail = { e ->
-                Log.e("Image", "error=${e.message}")
-            }
-        )
+        presenter.search(keyword)
     }
+
+    override fun updateResult(result: List<Blog>) {
+        blogAdapter.setData(result)
+    }
+
+    override fun showErrorMessage(message: String) {
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
+    }
+
 }
