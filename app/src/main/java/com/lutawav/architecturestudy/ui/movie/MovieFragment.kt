@@ -48,15 +48,32 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>(), MovieContract.View{
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.unsubscribe()
+    }
+
+    override fun showEmptyResultView() {
+        empty_result_view.isVisible = true
+    }
+
+    override fun showResultListView() {
+        movie_RecyclerView.isVisible = true
+    }
+
+    override fun hideEmptyResultView() {
+        empty_result_view.isVisible = false
+    }
+
+    override fun hideResultListView() {
+        movie_RecyclerView.isVisible = false
+    }
+
     override fun search(keyword: String) {
         presenter.search(keyword)
     }
 
     override fun updateResult(result: List<Movie>) {
         movieAdapter.setData(result)
-    }
-
-    override fun showErrorMessage(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 }

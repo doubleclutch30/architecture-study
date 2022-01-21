@@ -47,6 +47,27 @@ class BlogFragment : BaseFragment<FragmentBlogBinding>(), BlogContract.View {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.unsubscribe()
+    }
+
+    override fun showEmptyResultView() {
+        empty_result_view.isVisible = true
+    }
+
+    override fun showResultListView() {
+        movie_RecyclerView.isVisible = true
+    }
+
+    override fun hideEmptyResultView() {
+        empty_result_view.isVisible = false
+    }
+
+    override fun hideResultListView() {
+        movie_RecyclerView.isVisible = false
+    }
+
     override fun search(keyword: String) {
         presenter.search(keyword)
     }
@@ -54,9 +75,4 @@ class BlogFragment : BaseFragment<FragmentBlogBinding>(), BlogContract.View {
     override fun updateResult(result: List<Blog>) {
         blogAdapter.setData(result)
     }
-
-    override fun showErrorMessage(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
-    }
-
 }
