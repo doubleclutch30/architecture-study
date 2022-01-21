@@ -1,31 +1,40 @@
 package com.lutawav.architecturestudy.network
 
-import com.lutawav.architecturestudy.data.model.Blog
-import com.lutawav.architecturestudy.data.model.Image
-import com.lutawav.architecturestudy.data.model.Movie
-import com.lutawav.architecturestudy.data.model.NaverQueryResponse
-import retrofit2.Call
+import com.lutawav.architecturestudy.data.model.ResponseBlog
+import com.lutawav.architecturestudy.data.model.ResponseImage
+import com.lutawav.architecturestudy.data.model.ResponseMovie
+import com.lutawav.architecturestudy.util.singleIoMainThread
+import io.reactivex.Single
+import io.reactivex.SingleTransformer
 
 object NaverApi {
 
-    fun getMovies(keyword: String): Call<NaverQueryResponse<Movie>> =
+    fun getMovie(keyword: String): Single<ResponseMovie> =
         ApiClient.apiService
-            .getMovies(
+            .getMovie(
                 query = keyword
             )
+            .map { ResponseMovie(it.items) }
+            .compose(commonNetwork())
 
-
-    fun getBlog(keyword: String): Call<NaverQueryResponse<Blog>> =
+    fun getBlog(keyword: String): Single<ResponseBlog> =
         ApiClient.apiService
             .getBlog(
                 query = keyword
             )
+            .map { ResponseBlog(it.items) }
+            .compose(commonNetwork())
 
-
-    fun getImage(keyword: String): Call<NaverQueryResponse<Image>> =
+    fun getImage(keyword: String): Single<ResponseImage> =
         ApiClient.apiService
             .getImage(
                 query = keyword
             )
+            .map { ResponseImage(it.items) }
+            .compose(commonNetwork())
 
+    private fun <T> commonNetwork(): SingleTransformer<T, T> = SingleTransformer { upstream ->
+        upstream
+            .compose(singleIoMainThread())
+    }
 }
