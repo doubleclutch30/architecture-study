@@ -1,8 +1,8 @@
-package com.lutawav.architecturestudy.data.dao
+package com.lutawav.architecturestudy.data.database.dao
 
 import androidx.room.Insert
 import androidx.room.Query
-import com.lutawav.architecturestudy.data.entity.MovieEntity
+import com.lutawav.architecturestudy.data.database.entity.MovieEntity
 
 interface MovieDao {
 

@@ -1,8 +1,8 @@
-package com.lutawav.architecturestudy.data.dao
+package com.lutawav.architecturestudy.data.database.dao
 
 import androidx.room.Insert
 import androidx.room.Query
-import com.lutawav.architecturestudy.data.entity.ImageEntity
+import com.lutawav.architecturestudy.data.database.entity.ImageEntity
 
 interface ImageDao {
     @Insert
