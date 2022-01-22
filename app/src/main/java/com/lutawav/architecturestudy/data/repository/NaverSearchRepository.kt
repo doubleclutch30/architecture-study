@@ -8,8 +8,6 @@ import io.reactivex.Single
 
 interface NaverSearchRepository {
 
-    val naverSearchRemoteDataSource: NaverSearchRemoteDataSource
-
     fun getMovie(keyword: String) : Single<ResponseMovie>
 
     fun getBlog(keyword: String) : Single<ResponseBlog>
