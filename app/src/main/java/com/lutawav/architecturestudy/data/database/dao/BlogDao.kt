@@ -1,17 +1,20 @@
 package com.lutawav.architecturestudy.data.database.dao
 
+import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.lutawav.architecturestudy.data.database.entity.BlogEntity
+import io.reactivex.Single
 
+@Dao
 interface BlogDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(blogs: List<BlogEntity>)
+    fun insertAll(blogs: List<BlogEntity>)
 
     @Query("SELECT * from blog")
-    suspend fun getAll(): List<BlogEntity>
+    fun getAll(): Single<List<BlogEntity>>
 
     @Query("DELETE from blog")
-    suspend fun clearAll()
+    fun clearAll()
 }
