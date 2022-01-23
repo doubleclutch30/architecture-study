@@ -10,6 +10,7 @@ import com.lutawav.architecturestudy.data.model.Movie
 import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
 import com.lutawav.architecturestudy.databinding.FragmentMovieBinding
 import com.lutawav.architecturestudy.ui.BaseFragment
+import com.lutawav.architecturestudy.util.then
 import kotlinx.android.synthetic.main.fragment_movie.   *
 
 class MovieFragment : BaseFragment<FragmentMovieBinding>(), MovieContract.View {
@@ -22,10 +23,6 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>(), MovieContract.View {
 
     override fun getViewBinding(): FragmentMovieBinding =
         FragmentMovieBinding.inflate(layoutInflater)
-
-    private val naverSearchRepository by lazy {
-        NaverSearchRepositoryImpl()
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,11 +42,29 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>(), MovieContract.View {
         search_bar.onClickAction = { keyword ->
             search(keyword)
         }
+
+        presenter.subscribe()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         presenter.unsubscribe()
+    }
+
+
+    override fun updateUi(keyword: String, movies: List<Movie>) {
+        keyword.isNotBlank().then {
+            binding.searchBar.keyword = keyword
+
+            if (movies.isEmpty()) {
+                hideResultListView()
+                showEmptyResultView()
+            } else {
+                hideEmptyResultView()
+                showResultListView()
+                movieAdapter.setData(movies)
+            }
+        }
     }
 
     override fun showEmptyResultView() {
