@@ -6,7 +6,7 @@ import com.lutawav.architecturestudy.data.model.ResponseMovie
 import com.lutawav.architecturestudy.network.NaverApi
 import io.reactivex.Single
 
-class NaverSearchRemoteDataSourceImpl : NaverSearchRemoteDataSource {
+object NaverSearchRemoteDataSourceImpl : NaverSearchRemoteDataSource {
 
     override fun getMovie(
         keyword: String

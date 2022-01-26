@@ -17,18 +17,10 @@ abstract class BaseFragment<VB: ViewBinding>: Fragment(), BaseContract.View {
 
     abstract fun getViewBinding(): VB
 
-    private val naverSearchRemoteDataSource by lazy {
-        NaverSearchRemoteDataSourceImpl()
-    }
-
-    private val naverSearchLocalDataSource by lazy {
-        NaverSearchLocalDataSourceImpl(requireContext())
-    }
-
     val naverSearchRepository by lazy {
         NaverSearchRepositoryImpl(
-            naverSearchRemoteDataSource = naverSearchRemoteDataSource,
-            naverSearchLocalDataSource = naverSearchLocalDataSource
+            naverSearchRemoteDataSource = NaverSearchRemoteDataSourceImpl,
+            naverSearchLocalDataSource = NaverSearchLocalDataSourceImpl
         )
     }
 

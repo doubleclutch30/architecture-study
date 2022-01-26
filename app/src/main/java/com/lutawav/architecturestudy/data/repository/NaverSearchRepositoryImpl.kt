@@ -6,7 +6,7 @@ import com.lutawav.architecturestudy.data.database.entity.MovieEntity
 import com.lutawav.architecturestudy.data.model.*
 import com.lutawav.architecturestudy.data.source.local.NaverSearchLocalDataSource
 import com.lutawav.architecturestudy.data.source.remote.NaverSearchRemoteDataSource
-import com.lutawav.architecturestudy.data.source.remote.NaverSearchRemoteDataSourceImpl
+import io.reactivex.Completable
 import io.reactivex.Single
 
 class NaverSearchRepositoryImpl(
@@ -44,43 +44,107 @@ class NaverSearchRepositoryImpl(
     override fun getLatestBlogResult(): Single<List<Blog>> =
         naverSearchLocalDataSource.getBlog()
 
+    override fun refreshMovieSearchHistory(
+        keyword: String,
+        movies: List<Movie>
+    ): Single<List<Movie>> =
+        if (movies.isEmpty()) {
+            updateSearchHistory(
+                fun1 = { naverSearchLocalDataSource.clearMovieResult() },
+                fun2 = { naverSearchLocalDataSource.saveMovieKeyword(keyword) }
+            )
+                .toSingle { movies }
+        } else {
+            //
+            val movieList = ensureMovieEntityList(movies)
+            updateSearchHistory(
+                fun1 = { naverSearchLocalDataSource.clearMovieResult() },
+                fun2 = { naverSearchLocalDataSource.saveMovieKeyword(keyword) },
+                fun3 = { naverSearchLocalDataSource.saveMovieResult(movieList) }
+            )
+                .toSingle { movies }
+        }
 
-    override fun saveMovieResult(movies: List<MovieEntity>) {
-        naverSearchLocalDataSource.saveMovieResult(movies = movies)
-    }
+    // model -> entity
+    private fun ensureMovieEntityList(movies: List<Movie>): List<MovieEntity> =
+        arrayListOf<MovieEntity>().apply {
+            movies.mapTo(this) { movie ->
+                MovieEntity(
+                    title = movie.title,
+                    link = movie.link,
+                    image = movie.image,
+                    subtitle = movie.subtitle,
+                    director = movie.director,
+                    actor = movie.actor,
+                    pubDate = movie.pubDate,
+                    userRating = movie.userRating
+                )
+            }
+        }
 
-    override fun saveImageResult(images: List<ImageEntity>) {
-        naverSearchLocalDataSource.saveImageResult(images = images)
-    }
+    override fun refreshImageSearchHistory(
+        keyword: String,
+        images: List<Image>
+    ): Single<List<Image>> =
+        if (images.isEmpty()) {
+            updateSearchHistory(
+                fun1 = { naverSearchLocalDataSource.clearImageResult() },
+                fun2 = { naverSearchLocalDataSource.saveImageKeyword(keyword) }
+            )
+                .toSingle { images }
+        } else {
+            val imageList = ensureImageEntityList(images)
+            updateSearchHistory(
+                fun1 = { naverSearchLocalDataSource.clearImageResult() },
+                fun2 = { naverSearchLocalDataSource.saveImageKeyword(keyword) },
+                fun3 = { naverSearchLocalDataSource.saveImageResult(imageList) }
+            )
+                .toSingle { images }
+        }
 
-    override fun saveBlogResult(blogs: List<BlogEntity>) {
-        naverSearchLocalDataSource.saveBlogResult(blogs = blogs)
-    }
+    private fun ensureImageEntityList(images: List<Image>): List<ImageEntity> =
+        arrayListOf<ImageEntity>().apply {
+            images.mapTo(this) { image ->
+                ImageEntity(
+                    link = image.link,
+                    sizeWidth = image.sizeWidth,
+                    sizeHeight = image.sizeHeight,
+                    thumbnail = image.thumbnail,
+                    title = image.title
+                )
+            }
+        }
 
-    override fun clearMovieResult() {
-        naverSearchLocalDataSource.clearMovieResult()
-    }
+    override fun refreshBlogSearchHistory(keyword: String, blogs: List<Blog>): Single<List<Blog>> =
+        if (blogs.isEmpty()) {
+            updateSearchHistory(
+                fun1 = { naverSearchLocalDataSource.clearBlogResult() },
+                fun2 = { naverSearchLocalDataSource.saveBlogKeyword(keyword) }
+            )
+                .toSingle { blogs }
+        } else {
+            val blogList = ensureBlogEntityList(blogs)
+            updateSearchHistory(
+                fun1 = { naverSearchLocalDataSource.clearBlogResult() },
+                fun2 = { naverSearchLocalDataSource.saveBlogKeyword(keyword) },
+                fun3 = { naverSearchLocalDataSource.saveBlogResult(blogList) }
+            )
+                .toSingle { blogs }
+        }
 
-    override fun clearImageResult() {
-        naverSearchLocalDataSource.clearImageResult()
-    }
-
-    override fun clearBlogResult() {
-        naverSearchLocalDataSource.clearBlogResult()
-    }
-
-
-    override fun saveMovieKeyword(keyword: String) {
-        naverSearchLocalDataSource.saveMovieKeyword(keyword)
-    }
-
-    override fun saveImageKeyword(keyword: String) {
-        naverSearchLocalDataSource.saveImageKeyword(keyword)
-    }
-
-    override fun saveBlogKeyword(keyword: String) {
-        naverSearchLocalDataSource.saveBlogKeyword(keyword)
-    }
+    private fun ensureBlogEntityList(blogs: List<Blog>): List<BlogEntity> =
+        arrayListOf<BlogEntity>().apply {
+            blogs.mapTo(this) { blog ->
+                BlogEntity(
+                    bloggerLink = blog.bloggerLink,
+                    bloggerName = blog.bloggerName,
+                    description = blog.description,
+                    link = blog.link,
+                    postdate = blog.postdate,
+                    title = blog.title
+                )
+            }
+        }
 
     override fun getLatestMovieKeyword(): String =
         naverSearchLocalDataSource.getLatestMovieKeyword()
@@ -91,15 +155,22 @@ class NaverSearchRepositoryImpl(
     override fun getLatestBlogKeyword(): String =
         naverSearchLocalDataSource.getLatestBlogKeyword()
 
-    override fun clearMovieKeyword() {
-        naverSearchLocalDataSource.clearMovieKeyword()
-    }
+    private fun updateSearchHistory(
+        fun1: () -> Unit,
+        fun2: () -> Unit,
+        fun3: (() -> Unit)? = null
+    ): Completable {
+        val firstCall = Completable.fromCallable(fun1)
+        val secondCall = Completable.fromCallable(fun2)
+        val completable = firstCall
+            .andThen(secondCall)
 
-    override fun clearImageKeyword() {
-        naverSearchLocalDataSource.clearImageKeyword()
-    }
-
-    override fun clearBlogKeyword() {
-        naverSearchLocalDataSource.clearBlogKeyword()
+        return fun3?.let { call ->
+            val thirdCall = Completable.fromCallable(call)
+            completable
+                .andThen(thirdCall)
+        } ?: run {
+            completable
+        }
     }
 }

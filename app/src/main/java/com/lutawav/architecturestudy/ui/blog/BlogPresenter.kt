@@ -1,7 +1,6 @@
 package com.lutawav.architecturestudy.ui.blog
 
 import android.util.Log
-import com.lutawav.architecturestudy.data.database.entity.BlogEntity
 import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
 import com.lutawav.architecturestudy.ui.BaseSearchPresenter
 import com.lutawav.architecturestudy.util.addTo
@@ -32,26 +31,11 @@ class BlogPresenter(
         repository.getBlog(
             keyword = keyword
         )
-            .map {
-                clearSearchHistory { repository.clearBlogResult() }
-                it.blogs.isNotEmpty().then {
-                    val blogList = arrayListOf<BlogEntity>()
-                    it.blogs.mapTo(blogList) { blog ->
-                        BlogEntity(
-                            bloggerLink = blog.bloggerLink,
-                            bloggerName = blog.bloggerName,
-                            description = blog.description,
-                            link = blog.link,
-                            postdate = blog.postdate,
-                            title = blog.title
-                        )
-                    }
-                    updateSearchHistory {
-                        repository.saveBlogResult(blogList)
-                    }
-                }
-                repository.saveBlogKeyword(keyword)
-                it.blogs
+            .flatMap {
+                repository.refreshBlogSearchHistory(
+                    keyword = keyword,
+                    blogs = it.blogs
+                )
             }
             .compose(singleIoMainThread())
             .subscribe({ blogs ->

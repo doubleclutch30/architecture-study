@@ -1,7 +1,6 @@
 package com.lutawav.architecturestudy.ui.movie
 
 import android.util.Log
-import com.lutawav.architecturestudy.data.database.entity.MovieEntity
 import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
 import com.lutawav.architecturestudy.ui.BaseSearchPresenter
 import com.lutawav.architecturestudy.util.addTo
@@ -32,31 +31,11 @@ class MoviePresenter(
         repository.getMovie(
             keyword = keyword
         )
-            .map {
-                // 기존 결과 삭제
-                clearSearchHistory { repository.clearMovieResult() }
-                it.movies.isNotEmpty().then {
-                    val movieList = arrayListOf<MovieEntity>()
-                    // 엔티티 -> 모델
-                    it.movies.mapTo(movieList) { movie ->
-                        MovieEntity(
-                            title = movie.title,
-                            link = movie.link,
-                            image = movie.image,
-                            subtitle = movie.subtitle,
-                            director = movie.director,
-                            actor = movie.actor,
-                            pubDate = movie.pubDate,
-                            userRating = movie.userRating
-                        )
-                    }
-                    updateSearchHistory {
-                        // 최신 결과 저장
-                        repository.saveMovieResult(movieList)
-                    }
-                }
-                repository.saveMovieKeyword(keyword)
-                it.movies
+            .flatMap {
+                repository.refreshMovieSearchHistory(
+                    keyword = keyword,
+                    movies = it.movies
+                )
             }
             .compose(singleIoMainThread())
             .subscribe({ movies ->

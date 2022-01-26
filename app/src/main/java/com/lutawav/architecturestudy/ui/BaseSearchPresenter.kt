@@ -15,21 +15,8 @@ abstract class BaseSearchPresenter(
         disposable.clear()
     }
 
-    override fun updateSearchHistory(func: () -> Unit) {
-        completeCallable(func)
-    }
-
-    override fun clearSearchHistory(func: () -> Unit) {
-        completeCallable(func)
-    }
-
     override fun handleError(e: Throwable) {
         val message = e.message ?: return
         view.showErrorMessage(message)
-    }
-
-    private fun completeCallable(func: () -> Unit) {
-        Completable.fromCallable(func)
-            .subscribe()
     }
 }

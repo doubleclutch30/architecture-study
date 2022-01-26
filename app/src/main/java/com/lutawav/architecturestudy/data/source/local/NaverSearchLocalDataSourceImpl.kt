@@ -2,6 +2,7 @@ package com.lutawav.architecturestudy.data.source.local
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.lutawav.architecturestudy.MainApplication
 import com.lutawav.architecturestudy.data.database.SearchHistoryDatabase
 import com.lutawav.architecturestudy.data.database.entity.BlogEntity
 import com.lutawav.architecturestudy.data.database.entity.ImageEntity
@@ -15,10 +16,17 @@ import com.lutawav.architecturestudy.data.source.local.NaverSearchLocalDataSourc
 import com.lutawav.architecturestudy.data.source.local.NaverSearchLocalDataSource.Companion.PREFS_NAME
 import io.reactivex.Single
 
-class NaverSearchLocalDataSourceImpl(context: Context) : NaverSearchLocalDataSource {
+object NaverSearchLocalDataSourceImpl : NaverSearchLocalDataSource {
+
+    private val context: Context
+        get() = MainApplication.instance
 
     override val searchHistoryDatabase: SearchHistoryDatabase by lazy {
         SearchHistoryDatabase.getInstance(context)
+    }
+
+    override val sharedPreferences: SharedPreferences by lazy {
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
 
     override fun getMovie(): Single<List<Movie>> =
@@ -75,10 +83,6 @@ class NaverSearchLocalDataSourceImpl(context: Context) : NaverSearchLocalDataSou
                 }
                 blogs
             }
-
-    override val sharedPreferences: SharedPreferences by lazy {
-        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-    }
 
     override fun saveMovieResult(movies: List<MovieEntity>) {
         searchHistoryDatabase.movieDao().insertAll(movies)

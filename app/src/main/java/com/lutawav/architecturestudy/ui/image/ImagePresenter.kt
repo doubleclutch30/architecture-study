@@ -1,7 +1,6 @@
 package com.lutawav.architecturestudy.ui.image
 
 import android.util.Log
-import com.lutawav.architecturestudy.data.database.entity.ImageEntity
 import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
 import com.lutawav.architecturestudy.ui.BaseSearchPresenter
 import com.lutawav.architecturestudy.util.addTo
@@ -32,25 +31,11 @@ class ImagePresenter(
         repository.getImage(
             keyword = keyword
         )
-            .map {
-                clearSearchHistory { repository.clearImageResult() }
-                it.images.isNotEmpty().then {
-                    val imageList = arrayListOf<ImageEntity>()
-                    it.images.mapTo(imageList) { image ->
-                        ImageEntity(
-                            link = image.link,
-                            sizeWidth = image.sizeWidth,
-                            sizeHeight = image.sizeHeight,
-                            thumbnail = image.thumbnail,
-                            title = image.title
-                        )
-                    }
-                    updateSearchHistory {
-                        repository.saveImageResult(imageList)
-                    }
-                }
-                repository.saveImageKeyword(keyword)
-                it.images
+            .flatMap {
+                repository.refreshImageSearchHistory(
+                    keyword = keyword,
+                    images = it.images
+                )
             }
             .compose(singleIoMainThread())
             .subscribe({ images ->

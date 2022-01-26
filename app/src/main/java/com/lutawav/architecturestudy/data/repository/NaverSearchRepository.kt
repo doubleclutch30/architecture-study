@@ -18,29 +18,12 @@ interface NaverSearchRepository {
     fun getLatestImageResult() : Single<List<Image>>
     fun getLatestBlogResult() : Single<List<Blog>>
 
-
-    fun saveMovieResult(movies : List<MovieEntity>)
-    fun saveImageResult(images: List<ImageEntity>)
-    fun saveBlogResult(blogs: List<BlogEntity>)
-
-
-    fun clearMovieResult()
-    fun clearImageResult()
-    fun clearBlogResult()
-
-
-    fun saveMovieKeyword(keyword: String)
-    fun saveImageKeyword(keyword: String)
-    fun saveBlogKeyword(keyword: String)
-
+    fun refreshMovieSearchHistory(keyword: String, movies: List<Movie>): Single<List<Movie>>
+    fun refreshImageSearchHistory(keyword: String, images: List<Image>): Single<List<Image>>
+    fun refreshBlogSearchHistory(keyword: String, blogs: List<Blog>): Single<List<Blog>>
 
     fun getLatestMovieKeyword() : String
     fun getLatestImageKeyword() : String
     fun getLatestBlogKeyword() : String
-
-
-    fun clearMovieKeyword()
-    fun clearImageKeyword()
-    fun clearBlogKeyword()
 
 }
