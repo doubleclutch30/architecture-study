@@ -13,12 +13,48 @@ class BlogPresenter(
     override val repository: NaverSearchRepositoryImpl
 ) : BaseSearchPresenter(view, repository), BlogContract.Presenter {
 
+    override fun subscribe() {
+        val lastKeyword = repository.getLatestBlogKeyword()
+        lastKeyword.isNotBlank().then {
+            repository.getLatestBlogResult()
+                .compose(singleIoMainThread())
+                .subscribe({
+                    view.updateUi(lastKeyword, it)
+                }, { e ->
+                    val message = e.message ?: return@subscribe
+                    Log.e("blog", message)
+                })
+                .addTo(disposable)
+        }
+    }
+
     override fun search(keyword: String) {
         repository.getBlog(
-            keyword = keyword,
+            keyword = keyword
         )
-            .subscribe({ responseBlog ->
-                val blogs = responseBlog.blogs
+            .map {
+                clearSearchHistory { repository.clearBlogResult() }
+                it.blogs.isNotEmpty().then {
+                    val blogList = arrayListOf<BlogEntity>()
+                    it.blogs.mapTo(blogList) { blog ->
+                        BlogEntity(
+                            bloggerLink = blog.bloggerLink,
+                            bloggerName = blog.bloggerName,
+                            description = blog.description,
+                            link = blog.link,
+                            postdate = blog.postdate,
+                            title = blog.title
+                        )
+                    }
+                    updateSearchHistory {
+                        repository.saveBlogResult(blogList)
+                    }
+                }
+                repository.saveBlogKeyword(keyword)
+                it.blogs
+            }
+            .compose(singleIoMainThread())
+            .subscribe({ blogs ->
                 if (blogs.isEmpty()) {
                     view.hideResultListView()
                     view.showEmptyResultView()
@@ -26,10 +62,10 @@ class BlogPresenter(
                     view.hideEmptyResultView()
                     view.showResultListView()
                 }
-                view.updateResult(responseBlog.blogs)
+                view.updateResult(blogs)
             }, { e ->
                 handleError(e)
-            }
-        )
+            })
+            .addTo(disposable)
     }
 }

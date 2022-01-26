@@ -70,8 +70,8 @@ class MoviePresenter(
                 view.updateResult(movies)
             }, { e ->
                 handleError(e)
-            }
-        )
+            })
+            .addTo(disposable)
     }
 
 }
