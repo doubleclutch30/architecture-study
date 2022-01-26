@@ -1,6 +1,7 @@
 package com.lutawav.architecturestudy.ui.movie
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -51,7 +52,6 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>(), MovieContract.View {
         presenter.unsubscribe()
     }
 
-
     override fun updateUi(keyword: String, movies: List<Movie>) {
         keyword.isNotBlank().then {
             binding.searchBar.keyword = keyword
@@ -59,10 +59,12 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>(), MovieContract.View {
             if (movies.isEmpty()) {
                 hideResultListView()
                 showEmptyResultView()
+                Log.e("updateUi", "empty")
             } else {
                 hideEmptyResultView()
                 showResultListView()
                 movieAdapter.setData(movies)
+                Log.e("updateUi", "ok")
             }
         }
     }
@@ -88,6 +90,10 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>(), MovieContract.View {
     }
 
     override fun updateResult(result: List<Movie>) {
-        movieAdapter.setData(result)
+        if (result.isEmpty()) {
+            movieAdapter.clear()
+        } else {
+            movieAdapter.setData(result)
+        }
     }
 }

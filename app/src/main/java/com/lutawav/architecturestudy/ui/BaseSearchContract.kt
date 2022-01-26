@@ -18,5 +18,9 @@ interface BaseSearchContract {
 
     interface Presenter : BaseContract.Presenter {
         fun search(keyword: String)
+
+        fun updateSearchHistory(func: () -> Unit)
+
+        fun clearSearchHistory(func: () -> Unit)
     }
 }

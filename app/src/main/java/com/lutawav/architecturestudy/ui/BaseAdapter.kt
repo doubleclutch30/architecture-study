@@ -15,8 +15,13 @@ abstract class BaseAdapter<T, H: BaseViewHolder<T>>
     override fun getItemCount(): Int = items.size
 
     open fun setData(items: List<T>) {
-        this.items.clear()
+        clear()
         this.items.addAll(items)
+        notifyDataSetChanged()
+    }
+
+    fun clear() {
+        items.clear()
         notifyDataSetChanged()
     }
 }

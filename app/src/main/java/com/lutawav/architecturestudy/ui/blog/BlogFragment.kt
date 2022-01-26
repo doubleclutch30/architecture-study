@@ -2,30 +2,21 @@ package com.lutawav.architecturestudy.ui.blog
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.lutawav.architecturestudy.data.model.Blog
-import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
 import com.lutawav.architecturestudy.databinding.FragmentBlogBinding
 import com.lutawav.architecturestudy.ui.BaseFragment
+import com.lutawav.architecturestudy.util.then
 import kotlinx.android.synthetic.main.fragment_blog.*
-import kotlinx.android.synthetic.main.fragment_blog.search_bar
-import kotlinx.android.synthetic.main.fragment_image.*
-import kotlinx.android.synthetic.main.fragment_movie.*
 
 
 class BlogFragment : BaseFragment<FragmentBlogBinding>(), BlogContract.View {
 
     override val presenter: BlogContract.Presenter by lazy {
         BlogPresenter(this, naverSearchRepository)
-    }
-
-    override fun updateUi(keyword: String, data: List<Blog>) {
-        TODO("Not yet implemented")
     }
 
     private lateinit var blogAdapter: BlogAdapter
@@ -52,11 +43,28 @@ class BlogFragment : BaseFragment<FragmentBlogBinding>(), BlogContract.View {
         search_bar.onClickAction = { keyword ->
             search(keyword)
         }
+
+        presenter.subscribe()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         presenter.unsubscribe()
+    }
+
+    override fun updateUi(keyword: String, blog: List<Blog>) {
+        keyword.isNotEmpty().then {
+            binding.searchBar.keyword = keyword
+
+            if (blog.isEmpty()) {
+                hideResultListView()
+                showEmptyResultView()
+            } else {
+                hideEmptyResultView()
+                showResultListView()
+                blogAdapter.setData(blog)
+            }
+        }
     }
 
     override fun showEmptyResultView() {
@@ -80,6 +88,10 @@ class BlogFragment : BaseFragment<FragmentBlogBinding>(), BlogContract.View {
     }
 
     override fun updateResult(result: List<Blog>) {
-        blogAdapter.setData(result)
+        if (result.isEmpty()) {
+            blogAdapter.clear()
+        } else {
+            blogAdapter.setData(result)
+        }
     }
 }

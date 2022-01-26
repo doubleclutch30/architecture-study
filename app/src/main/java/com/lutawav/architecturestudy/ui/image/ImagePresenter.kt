@@ -2,32 +2,22 @@ package com.lutawav.architecturestudy.ui.image
 
 import android.util.Log
 import com.lutawav.architecturestudy.data.database.entity.ImageEntity
-import com.lutawav.architecturestudy.data.repository.NaverSearchRepository
+import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
 import com.lutawav.architecturestudy.ui.BaseSearchPresenter
 import com.lutawav.architecturestudy.util.addTo
+import com.lutawav.architecturestudy.util.singleIoMainThread
 import com.lutawav.architecturestudy.util.then
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 class ImagePresenter(
     override val view: ImageContract.View,
-    override val repository: NaverSearchRepository
+    override val repository: NaverSearchRepositoryImpl
 ) : BaseSearchPresenter(view, repository), ImageContract.Presenter {
 
     override fun subscribe() {
-        super.subscribe()
-        loadData()
-    }
-
-    private fun loadData() {
         val lastKeyword = repository.getLatestImageKeyword()
-        if (lastKeyword.isBlank()) {
-            view.updateUi(lastKeyword, emptyList())
-        } else {
+        lastKeyword.isNotBlank().then {
             repository.getLatestImageResult()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(singleIoMainThread())
                 .subscribe({
                     view.updateUi(lastKeyword, it)
                 }, { e ->
@@ -43,10 +33,11 @@ class ImagePresenter(
             keyword = keyword
         )
             .map {
-                updateImageResult { repository.clearImageResult() }
+                clearSearchHistory { repository.clearImageResult() }
                 it.images.isNotEmpty().then {
                     val imageList = arrayListOf<ImageEntity>()
-                    it.images.mapTo(imageList) { image -> ImageEntity(
+                    it.images.mapTo(imageList) { image ->
+                        ImageEntity(
                             link = image.link,
                             sizeWidth = image.sizeWidth,
                             sizeHeight = image.sizeHeight,
@@ -54,13 +45,14 @@ class ImagePresenter(
                             title = image.title
                         )
                     }
-                    updateImageResult {
+                    updateSearchHistory {
                         repository.saveImageResult(imageList)
                     }
                 }
                 repository.saveImageKeyword(keyword)
                 it.images
             }
+            .compose(singleIoMainThread())
             .subscribe({ images ->
                 if (images.isEmpty()) {
                     view.hideResultListView()
@@ -72,7 +64,8 @@ class ImagePresenter(
                 view.updateResult(images)
             }, { e ->
                 handleError(e)
-            }
-        )
+            })
+            .addTo(disposable)
     }
+
 }

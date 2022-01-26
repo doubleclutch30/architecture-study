@@ -86,6 +86,10 @@ class ImageFragment : BaseFragment<FragmentImageBinding>(), ImageContract.View {
     }
 
     override fun updateResult(result: List<Image>) {
-        imageAdapter.setData(result)
+        if (result.isEmpty()) {
+            imageAdapter.clear()
+        } else {
+            imageAdapter.setData(result)
+        }
     }
 }

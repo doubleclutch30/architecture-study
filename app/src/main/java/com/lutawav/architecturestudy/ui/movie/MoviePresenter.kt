@@ -5,10 +5,8 @@ import com.lutawav.architecturestudy.data.database.entity.MovieEntity
 import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
 import com.lutawav.architecturestudy.ui.BaseSearchPresenter
 import com.lutawav.architecturestudy.util.addTo
+import com.lutawav.architecturestudy.util.singleIoMainThread
 import com.lutawav.architecturestudy.util.then
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 class MoviePresenter(
     override val view: MovieContract.View,
@@ -16,18 +14,10 @@ class MoviePresenter(
 ) : BaseSearchPresenter(view, repository), MovieContract.Presenter {
 
     override fun subscribe() {
-        super.subscribe()
-        loadData()
-    }
-
-    private fun loadData() {
         val lastKeyword = repository.getLatestMovieKeyword()
-        if (lastKeyword.isBlank()) {
-            view.updateUi(lastKeyword, emptyList())
-        } else {
+        lastKeyword.isNotBlank().then {
             repository.getLatestMovieResult()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(singleIoMainThread())
                 .subscribe({
                     view.updateUi(lastKeyword, it)
                 }, { e ->
@@ -44,7 +34,7 @@ class MoviePresenter(
         )
             .map {
                 // 기존 결과 삭제
-                updateMovieResult { repository.clearMovieResult() }
+                clearSearchHistory { repository.clearMovieResult() }
                 it.movies.isNotEmpty().then {
                     val movieList = arrayListOf<MovieEntity>()
                     // 엔티티 -> 모델
@@ -60,7 +50,7 @@ class MoviePresenter(
                             userRating = movie.userRating
                         )
                     }
-                    updateMovieResult {
+                    updateSearchHistory {
                         // 최신 결과 저장
                         repository.saveMovieResult(movieList)
                     }
@@ -68,7 +58,7 @@ class MoviePresenter(
                 repository.saveMovieKeyword(keyword)
                 it.movies
             }
-
+            .compose(singleIoMainThread())
             .subscribe({ movies ->
                 if (movies.isEmpty()) {
                     view.hideResultListView()
@@ -84,10 +74,4 @@ class MoviePresenter(
         )
     }
 
-    private fun updateMovieResult(func: () -> Unit) {
-        Completable.fromCallable(func)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe()
-    }
 }

@@ -12,6 +12,7 @@ import com.lutawav.architecturestudy.data.model.Movie
 import com.lutawav.architecturestudy.data.source.local.NaverSearchLocalDataSource.Companion.PREFS_KEY_BLOG
 import com.lutawav.architecturestudy.data.source.local.NaverSearchLocalDataSource.Companion.PREFS_KEY_IMAGE
 import com.lutawav.architecturestudy.data.source.local.NaverSearchLocalDataSource.Companion.PREFS_KEY_MOVIE
+import com.lutawav.architecturestudy.data.source.local.NaverSearchLocalDataSource.Companion.PREFS_NAME
 import io.reactivex.Single
 
 class NaverSearchLocalDataSourceImpl(context: Context) : NaverSearchLocalDataSource {
@@ -76,7 +77,7 @@ class NaverSearchLocalDataSourceImpl(context: Context) : NaverSearchLocalDataSou
             }
 
     override val sharedPreferences: SharedPreferences by lazy {
-        context.getSharedPreferences("search_history", Context.MODE_PRIVATE)
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
 
     override fun saveMovieResult(movies: List<MovieEntity>) {
