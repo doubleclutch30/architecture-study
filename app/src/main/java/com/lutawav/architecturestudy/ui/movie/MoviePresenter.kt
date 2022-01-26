@@ -4,6 +4,11 @@ import android.util.Log
 import com.lutawav.architecturestudy.data.database.entity.MovieEntity
 import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
 import com.lutawav.architecturestudy.ui.BaseSearchPresenter
+import com.lutawav.architecturestudy.util.addTo
+import com.lutawav.architecturestudy.util.then
+import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 class MoviePresenter(
     override val view: MovieContract.View,
@@ -46,7 +51,7 @@ class MoviePresenter(
                     it.movies.mapTo(movieList) { movie ->
                         MovieEntity(
                             title = movie.title,
-                            link =  movie.link,
+                            link = movie.link,
                             image = movie.image,
                             subtitle = movie.subtitle,
                             director = movie.director,

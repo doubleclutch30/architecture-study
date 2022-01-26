@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.lutawav.architecturestudy.data.model.Image
-import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
 import com.lutawav.architecturestudy.databinding.FragmentImageBinding
 import com.lutawav.architecturestudy.ui.BaseFragment
+import com.lutawav.architecturestudy.util.then
 import kotlinx.android.synthetic.main.fragment_movie.*
 
 class ImageFragment : BaseFragment<FragmentImageBinding>(), ImageContract.View {
@@ -22,10 +22,6 @@ class ImageFragment : BaseFragment<FragmentImageBinding>(), ImageContract.View {
 
     override fun getViewBinding(): FragmentImageBinding =
         FragmentImageBinding.inflate(layoutInflater)
-
-    private val naverSearchRepository by lazy {
-        NaverSearchRepositoryImpl()
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,11 +41,28 @@ class ImageFragment : BaseFragment<FragmentImageBinding>(), ImageContract.View {
         search_bar.onClickAction = { keyword ->
             search(keyword)
         }
+
+        presenter.subscribe()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         presenter.unsubscribe()
+    }
+
+    override fun updateUi(keyword: String, images: List<Image>) {
+        keyword.isNotEmpty().then {
+            binding.searchBar.keyword = keyword
+
+            if (images.isEmpty()) {
+                hideResultListView()
+                showEmptyResultView()
+            } else {
+                hideEmptyResultView()
+                showResultListView()
+                imageAdapter.setData(images)
+            }
+        }
     }
 
     override fun showEmptyResultView() {
@@ -75,6 +88,4 @@ class ImageFragment : BaseFragment<FragmentImageBinding>(), ImageContract.View {
     override fun updateResult(result: List<Image>) {
         imageAdapter.setData(result)
     }
-
-
 }

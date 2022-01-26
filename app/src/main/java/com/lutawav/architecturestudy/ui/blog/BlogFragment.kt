@@ -24,12 +24,15 @@ class BlogFragment : BaseFragment<FragmentBlogBinding>(), BlogContract.View {
         BlogPresenter(this, naverSearchRepository)
     }
 
+    override fun updateUi(keyword: String, data: List<Blog>) {
+        TODO("Not yet implemented")
+    }
+
     private lateinit var blogAdapter: BlogAdapter
 
     override fun getViewBinding(): FragmentBlogBinding =
         FragmentBlogBinding.inflate(layoutInflater)
 
-    private val naverSearchRepository by lazy { NaverSearchRepositoryImpl() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

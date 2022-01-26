@@ -9,6 +9,8 @@ import com.lutawav.architecturestudy.data.database.entity.MovieEntity
 import com.lutawav.architecturestudy.data.model.Blog
 import com.lutawav.architecturestudy.data.model.Image
 import com.lutawav.architecturestudy.data.model.Movie
+import com.lutawav.architecturestudy.data.source.local.NaverSearchLocalDataSource.Companion.PREFS_KEY_BLOG
+import com.lutawav.architecturestudy.data.source.local.NaverSearchLocalDataSource.Companion.PREFS_KEY_IMAGE
 import com.lutawav.architecturestudy.data.source.local.NaverSearchLocalDataSource.Companion.PREFS_KEY_MOVIE
 import io.reactivex.Single
 
@@ -108,23 +110,25 @@ class NaverSearchLocalDataSourceImpl(context: Context) : NaverSearchLocalDataSou
     }
 
     override fun saveImageKeyword(keyword: String) {
-        TODO("Not yet implemented")
+        sharedPreferences.edit()
+            .putString(PREFS_KEY_IMAGE, keyword)
+            .apply()
     }
 
     override fun saveBlogKeyword(keyword: String) {
-        TODO("Not yet implemented")
+        sharedPreferences.edit()
+            .putString(PREFS_KEY_BLOG, keyword)
+            .apply()
     }
 
     override fun getLatestMovieKeyword(): String =
         sharedPreferences.getString(PREFS_KEY_MOVIE, "") ?: ""
 
-    override fun getLatestImageKeyword(): String {
-        TODO("Not yet implemented")
-    }
+    override fun getLatestImageKeyword(): String =
+        sharedPreferences.getString(PREFS_KEY_IMAGE, "") ?: ""
 
-    override fun getLatestBlogKeyword(): String {
-        TODO("Not yet implemented")
-    }
+    override fun getLatestBlogKeyword(): String =
+        sharedPreferences.getString(PREFS_KEY_BLOG, "") ?: ""
 
     override fun clearMovieKeyword() {
         TODO("Not yet implemented")
