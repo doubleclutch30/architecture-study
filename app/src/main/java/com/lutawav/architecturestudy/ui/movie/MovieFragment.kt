@@ -8,11 +8,9 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.lutawav.architecturestudy.data.model.Movie
-import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
 import com.lutawav.architecturestudy.databinding.FragmentMovieBinding
 import com.lutawav.architecturestudy.ui.BaseFragment
 import com.lutawav.architecturestudy.util.then
-import kotlinx.android.synthetic.main.fragment_movie.   *
 
 class MovieFragment : BaseFragment<FragmentMovieBinding>(), MovieContract.View {
 
@@ -40,7 +38,7 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>(), MovieContract.View {
             addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
         }
 
-        search_bar.onClickAction = { keyword ->
+        binding.searchBar.onClickAction = { keyword ->
             search(keyword)
         }
 

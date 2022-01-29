@@ -10,7 +10,6 @@ import com.lutawav.architecturestudy.data.model.Image
 import com.lutawav.architecturestudy.databinding.FragmentImageBinding
 import com.lutawav.architecturestudy.ui.BaseFragment
 import com.lutawav.architecturestudy.util.then
-import kotlinx.android.synthetic.main.fragment_movie.*
 
 class ImageFragment : BaseFragment<FragmentImageBinding>(), ImageContract.View {
 
@@ -38,7 +37,7 @@ class ImageFragment : BaseFragment<FragmentImageBinding>(), ImageContract.View {
             addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
         }
 
-        search_bar.onClickAction = { keyword ->
+        binding.searchBar.onClickAction = { keyword ->
             search(keyword)
         }
 

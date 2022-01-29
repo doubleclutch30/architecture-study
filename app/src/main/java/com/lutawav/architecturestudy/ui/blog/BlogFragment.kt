@@ -10,8 +10,6 @@ import com.lutawav.architecturestudy.data.model.Blog
 import com.lutawav.architecturestudy.databinding.FragmentBlogBinding
 import com.lutawav.architecturestudy.ui.BaseFragment
 import com.lutawav.architecturestudy.util.then
-import kotlinx.android.synthetic.main.fragment_blog.*
-
 
 class BlogFragment : BaseFragment<FragmentBlogBinding>(), BlogContract.View {
 
@@ -40,7 +38,7 @@ class BlogFragment : BaseFragment<FragmentBlogBinding>(), BlogContract.View {
             addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
         }
 
-        search_bar.onClickAction = { keyword ->
+        binding.searchBar.onClickAction = { keyword ->
             search(keyword)
         }
 

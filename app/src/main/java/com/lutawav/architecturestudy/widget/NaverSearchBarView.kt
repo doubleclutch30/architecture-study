@@ -5,15 +5,23 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.databinding.DataBindingUtil
 import com.lutawav.architecturestudy.R
+import com.lutawav.architecturestudy.databinding.ViewSearchBinding
 import com.lutawav.architecturestudy.util.hideKeyboard
-import kotlinx.android.synthetic.main.view_search.view.*
 
 class NaverSearchBarView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyle: Int = 0
 ) : ConstraintLayout(context, attrs, defStyle) {
+
+    private val binding: ViewSearchBinding = DataBindingUtil.inflate<ViewSearchBinding>(
+        LayoutInflater.from(context),
+        R.layout.view_search,
+        this,
+        true
+    )
 
     private val debounceTime: Long = 600L
 
@@ -23,20 +31,21 @@ class NaverSearchBarView @JvmOverloads constructor(
 
     var keyword: String? = null
         set(value) {
-                if (field != value) {
+            if (field != value) {
                 field = value
-                search_editor.setText(value)
+                binding.searchEditor.setText(value)
             }
         }
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_search, this, true)
 
-        search_btn.setOnClickListener {
+        binding.searchBtn.setOnClickListener {
             if (System.currentTimeMillis() - lastClickTime < debounceTime) {
                 return@setOnClickListener
             }
-            val keyword = search_editor.text.toString().trim()
+            val keyword = binding.searchEditor.text.toString()
+
             if (keyword.isBlank()) {
                 Toast.makeText(
                     context,

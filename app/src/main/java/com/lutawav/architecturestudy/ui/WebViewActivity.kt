@@ -3,14 +3,16 @@ package com.lutawav.architecturestudy.ui
 import android.os.Bundle
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import com.lutawav.architecturestudy.R
-import kotlinx.android.synthetic.main.activity_webview.*
+import com.lutawav.architecturestudy.databinding.ActivityWebviewBinding
 
-class WebViewActivity: AppCompatActivity() {
+class WebViewActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityWebviewBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_webview)
 
         val url = intent.getStringExtra(EXTRA_URL)
             ?: run {
@@ -21,7 +23,8 @@ class WebViewActivity: AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val webView = web_view.apply {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_webview)
+        binding.webView.apply {
             webViewClient = WebViewClient()
             settings.run {
                 displayZoomControls = true
@@ -30,8 +33,7 @@ class WebViewActivity: AppCompatActivity() {
                 domStorageEnabled = true
             }
         }
-        webView.loadUrl(url)
-
+        binding.webView.loadUrl(url)
     }
 
     override fun onSupportNavigateUp(): Boolean {
