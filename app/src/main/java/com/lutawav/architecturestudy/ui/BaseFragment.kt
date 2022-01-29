@@ -4,19 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.viewbinding.ViewBinding
 import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
 import com.lutawav.architecturestudy.data.source.local.NaverSearchLocalDataSourceImpl
 import com.lutawav.architecturestudy.data.source.remote.NaverSearchRemoteDataSourceImpl
 import com.lutawav.architecturestudy.util.showToastMessage
 
-abstract class BaseFragment<T: ViewDataBinding>: Fragment(), BaseContract.View {
+abstract class BaseFragment<T : ViewDataBinding>(
+    private val layoutId: Int,
+) : Fragment(), BaseContract.View {
 
     lateinit var binding: T
-
-    abstract fun getViewBinding(): T
 
     val naverSearchRepository by lazy {
         NaverSearchRepositoryImpl(
@@ -28,7 +28,7 @@ abstract class BaseFragment<T: ViewDataBinding>: Fragment(), BaseContract.View {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        binding = getViewBinding()
+        binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
         return binding.root
     }
 

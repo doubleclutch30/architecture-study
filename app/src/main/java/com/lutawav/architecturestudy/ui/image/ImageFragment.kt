@@ -6,21 +6,21 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.lutawav.architecturestudy.R
 import com.lutawav.architecturestudy.data.model.Image
 import com.lutawav.architecturestudy.databinding.FragmentImageBinding
 import com.lutawav.architecturestudy.ui.BaseFragment
 import com.lutawav.architecturestudy.util.then
 
-class ImageFragment : BaseFragment<FragmentImageBinding>(), ImageContract.View {
+class ImageFragment : BaseFragment<FragmentImageBinding>(
+    R.layout.fragment_image,
+), ImageContract.View {
 
     override val presenter: ImageContract.Presenter by lazy {
         ImagePresenter(this, naverSearchRepository)
     }
 
     private lateinit var imageAdapter: ImageAdapter
-
-    override fun getViewBinding(): FragmentImageBinding =
-        FragmentImageBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

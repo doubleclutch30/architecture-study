@@ -7,12 +7,15 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.lutawav.architecturestudy.R
 import com.lutawav.architecturestudy.data.model.Movie
 import com.lutawav.architecturestudy.databinding.FragmentMovieBinding
 import com.lutawav.architecturestudy.ui.BaseFragment
 import com.lutawav.architecturestudy.util.then
 
-class MovieFragment : BaseFragment<FragmentMovieBinding>(), MovieContract.View {
+class MovieFragment : BaseFragment<FragmentMovieBinding>(
+    R.layout.fragment_movie
+), MovieContract.View {
 
     override val presenter: MovieContract.Presenter by lazy {
         MoviePresenter(this, naverSearchRepository)
@@ -20,8 +23,6 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>(), MovieContract.View {
 
     private lateinit var movieAdapter: MovieAdapter
 
-    override fun getViewBinding(): FragmentMovieBinding =
-        FragmentMovieBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

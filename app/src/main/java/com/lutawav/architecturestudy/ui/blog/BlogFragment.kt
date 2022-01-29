@@ -6,22 +6,21 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.lutawav.architecturestudy.R
 import com.lutawav.architecturestudy.data.model.Blog
 import com.lutawav.architecturestudy.databinding.FragmentBlogBinding
 import com.lutawav.architecturestudy.ui.BaseFragment
 import com.lutawav.architecturestudy.util.then
 
-class BlogFragment : BaseFragment<FragmentBlogBinding>(), BlogContract.View {
+class BlogFragment : BaseFragment<FragmentBlogBinding>(
+    R.layout.fragment_blog
+), BlogContract.View {
 
     override val presenter: BlogContract.Presenter by lazy {
         BlogPresenter(this, naverSearchRepository)
     }
 
     private lateinit var blogAdapter: BlogAdapter
-
-    override fun getViewBinding(): FragmentBlogBinding =
-        FragmentBlogBinding.inflate(layoutInflater)
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
