@@ -1,6 +1,7 @@
 package com.lutawav.architecturestudy.data.model
 
 import com.google.gson.annotations.SerializedName
+import com.lutawav.architecturestudy.data.database.entity.BlogEntity
 
 data class Blog(
     @SerializedName("bloggerlink")
@@ -15,4 +16,13 @@ data class Blog(
 
 data class ResponseBlog(
     val blogs: List<Blog>
+)
+
+data class BlogRepo(
+    val keyword: String,
+    val blogs: List<Blog>
+)
+
+data class BlogLocalData(
+    val blogs: List<BlogEntity>
 )

@@ -5,7 +5,6 @@ import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
 import com.lutawav.architecturestudy.ui.BaseSearchPresenter
 import com.lutawav.architecturestudy.util.addTo
 import com.lutawav.architecturestudy.util.singleIoMainThread
-import com.lutawav.architecturestudy.util.then
 
 class ImagePresenter(
     override val view: ImageContract.View,
@@ -13,18 +12,15 @@ class ImagePresenter(
 ) : BaseSearchPresenter(view, repository), ImageContract.Presenter {
 
     override fun subscribe() {
-        val lastKeyword = repository.getLatestImageKeyword()
-        lastKeyword.isNotBlank().then {
-            repository.getLatestImageResult()
-                .compose(singleIoMainThread())
-                .subscribe({
-                    view.updateUi(lastKeyword, it)
-                }, { e ->
-                    val message = e.message ?: return@subscribe
-                    Log.e("image", message)
-                })
-                .addTo(disposable)
-        }
+        repository.getLatestImageResult()
+            .compose(singleIoMainThread())
+            .subscribe({
+                view.updateUi(it.keyword, it.images)
+            }, { e ->
+                val message = e.message ?: return@subscribe
+                Log.e("image", message)
+            })
+            .addTo(disposable)
     }
 
     override fun search(keyword: String) {
@@ -38,7 +34,8 @@ class ImagePresenter(
                 )
             }
             .compose(singleIoMainThread())
-            .subscribe({ images ->
+            .subscribe({ imageRepo ->
+                val images = imageRepo.images
                 if (images.isEmpty()) {
                     view.hideResultListView()
                     view.showEmptyResultView()
@@ -52,5 +49,4 @@ class ImagePresenter(
             })
             .addTo(disposable)
     }
-
 }

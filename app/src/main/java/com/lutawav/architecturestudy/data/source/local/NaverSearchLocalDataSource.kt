@@ -5,9 +5,7 @@ import com.lutawav.architecturestudy.data.database.SearchHistoryDatabase
 import com.lutawav.architecturestudy.data.database.entity.BlogEntity
 import com.lutawav.architecturestudy.data.database.entity.ImageEntity
 import com.lutawav.architecturestudy.data.database.entity.MovieEntity
-import com.lutawav.architecturestudy.data.model.Blog
-import com.lutawav.architecturestudy.data.model.Image
-import com.lutawav.architecturestudy.data.model.Movie
+import com.lutawav.architecturestudy.data.model.*
 import io.reactivex.Single
 
 interface NaverSearchLocalDataSource {
@@ -15,9 +13,9 @@ interface NaverSearchLocalDataSource {
     val searchHistoryDatabase: SearchHistoryDatabase
     val sharedPreferences : SharedPreferences
 
-    fun getMovie() : Single<List<Movie>>
-    fun getImage() : Single<List<Image>>
-    fun getBlog() : Single<List<Blog>>
+    fun getMovie() : Single<MovieLocalData>
+    fun getImage() : Single<ImageLocalData>
+    fun getBlog() : Single<BlogLocalData>
 
     fun saveMovieResult(movies: List<MovieEntity>)
     fun saveImageResult(images: List<ImageEntity>)
@@ -38,7 +36,6 @@ interface NaverSearchLocalDataSource {
     fun clearMovieKeyword()
     fun clearImageKeyword()
     fun clearBlogKeyword()
-
 
     companion object {
         const val PREFS_NAME = "search_history"

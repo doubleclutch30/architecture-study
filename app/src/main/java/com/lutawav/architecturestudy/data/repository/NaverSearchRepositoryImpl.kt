@@ -1,8 +1,8 @@
 package com.lutawav.architecturestudy.data.repository
 
-import com.lutawav.architecturestudy.data.database.entity.BlogEntity
-import com.lutawav.architecturestudy.data.database.entity.ImageEntity
-import com.lutawav.architecturestudy.data.database.entity.MovieEntity
+import com.lutawav.architecturestudy.data.mapper.BlogDataMapper
+import com.lutawav.architecturestudy.data.mapper.ImageDataMapper
+import com.lutawav.architecturestudy.data.mapper.MovieDataMapper
 import com.lutawav.architecturestudy.data.model.*
 import com.lutawav.architecturestudy.data.source.local.NaverSearchLocalDataSource
 import com.lutawav.architecturestudy.data.source.remote.NaverSearchRemoteDataSource
@@ -16,144 +16,162 @@ class NaverSearchRepositoryImpl(
 
     override fun getMovie(
         keyword: String
-    ): Single<ResponseMovie> =
+    ): Single<MovieRepo> =
         naverSearchRemoteDataSource.getMovie(
             keyword = keyword
         )
+            .map {
+                MovieRepo(
+                    keyword = keyword,
+                    movies = it.movies
+                )
+            }
 
     override fun getBlog(
         keyword: String
-    ): Single<ResponseBlog> =
+    ): Single<BlogRepo> =
         naverSearchRemoteDataSource.getBlog(
             keyword = keyword
         )
+            .map {
+                BlogRepo(
+                    keyword = keyword,
+                    blogs = it.blogs
+                )
+            }
 
     override fun getImage(
         keyword: String
-    ): Single<ResponseImage> =
+    ): Single<ImageRepo> =
         naverSearchRemoteDataSource.getImage(
             keyword = keyword
         )
+            .map {
+                ImageRepo(
+                    keyword = keyword,
+                    images = it.images
+                )
+            }
 
-    override fun getLatestMovieResult(): Single<List<Movie>> =
+    override fun getLatestMovieResult(): Single<MovieRepo> =
         naverSearchLocalDataSource.getMovie()
+            .map {
+                MovieRepo(
+                    keyword = naverSearchLocalDataSource.getLatestMovieKeyword(),
+                    movies = it.movies.map { entity ->
+                        MovieDataMapper.reverseMap(entity)
+                    }
+                )
+            }
 
-    override fun getLatestImageResult(): Single<List<Image>> =
+    override fun getLatestImageResult(): Single<ImageRepo> =
         naverSearchLocalDataSource.getImage()
+            .map {
+                ImageRepo(
+                    keyword = naverSearchLocalDataSource.getLatestImageKeyword(),
+                    images = it.images.map { entity ->
+                        ImageDataMapper.reverseMap(entity)
+                    }
+                )
+            }
 
-    override fun getLatestBlogResult(): Single<List<Blog>> =
+    override fun getLatestBlogResult(): Single<BlogRepo> =
         naverSearchLocalDataSource.getBlog()
+            .map {
+                BlogRepo(
+                    keyword = naverSearchLocalDataSource.getLatestBlogKeyword(),
+                    blogs = it.blogs.map { entity ->
+                        BlogDataMapper.reverseMap(entity)
+                    }
+                )
+            }
 
     override fun refreshMovieSearchHistory(
         keyword: String,
         movies: List<Movie>
-    ): Single<List<Movie>> =
-        if (movies.isEmpty()) {
+    ): Single<MovieRepo> {
+        val movieRepo = MovieRepo(
+            keyword = keyword,
+            movies = movies
+        )
+
+        return if (movies.isEmpty()) {
             updateSearchHistory(
                 fun1 = { naverSearchLocalDataSource.clearMovieResult() },
                 fun2 = { naverSearchLocalDataSource.saveMovieKeyword(keyword) }
             )
-                .toSingle { movies }
+                .toSingle { movieRepo }
         } else {
-            //
-            val movieList = ensureMovieEntityList(movies)
             updateSearchHistory(
                 fun1 = { naverSearchLocalDataSource.clearMovieResult() },
                 fun2 = { naverSearchLocalDataSource.saveMovieKeyword(keyword) },
-                fun3 = { naverSearchLocalDataSource.saveMovieResult(movieList) }
+                fun3 = {
+                    naverSearchLocalDataSource.saveMovieResult(
+                        movies.map { MovieDataMapper.map(it) }
+                    )
+                }
             )
-                .toSingle { movies }
+                .toSingle { movieRepo }
         }
-
-    // model -> entity
-    private fun ensureMovieEntityList(movies: List<Movie>): List<MovieEntity> =
-        arrayListOf<MovieEntity>().apply {
-            movies.mapTo(this) { movie ->
-                MovieEntity(
-                    title = movie.title,
-                    link = movie.link,
-                    image = movie.image,
-                    subtitle = movie.subtitle,
-                    director = movie.director,
-                    actor = movie.actor,
-                    pubDate = movie.pubDate,
-                    userRating = movie.userRating
-                )
-            }
-        }
+    }
 
     override fun refreshImageSearchHistory(
         keyword: String,
         images: List<Image>
-    ): Single<List<Image>> =
-        if (images.isEmpty()) {
+    ): Single<ImageRepo> {
+        val imageRepo = ImageRepo(
+            keyword = keyword,
+            images = images
+        )
+
+        return if (images.isEmpty()) {
             updateSearchHistory(
                 fun1 = { naverSearchLocalDataSource.clearImageResult() },
                 fun2 = { naverSearchLocalDataSource.saveImageKeyword(keyword) }
             )
-                .toSingle { images }
+                .toSingle { imageRepo }
         } else {
-            val imageList = ensureImageEntityList(images)
             updateSearchHistory(
                 fun1 = { naverSearchLocalDataSource.clearImageResult() },
                 fun2 = { naverSearchLocalDataSource.saveImageKeyword(keyword) },
-                fun3 = { naverSearchLocalDataSource.saveImageResult(imageList) }
+                fun3 = {
+                    naverSearchLocalDataSource.saveImageResult(
+                        images.map { ImageDataMapper.map(it) }
+                    )
+                }
             )
-                .toSingle { images }
+                .toSingle { imageRepo }
         }
+    }
 
-    private fun ensureImageEntityList(images: List<Image>): List<ImageEntity> =
-        arrayListOf<ImageEntity>().apply {
-            images.mapTo(this) { image ->
-                ImageEntity(
-                    link = image.link,
-                    sizeWidth = image.sizeWidth,
-                    sizeHeight = image.sizeHeight,
-                    thumbnail = image.thumbnail,
-                    title = image.title
-                )
-            }
-        }
+    override fun refreshBlogSearchHistory(
+        keyword: String,
+        blogs: List<Blog>
+    ): Single<BlogRepo> {
+        val blogRepo = BlogRepo(
+            keyword = keyword,
+            blogs = blogs
+        )
 
-    override fun refreshBlogSearchHistory(keyword: String, blogs: List<Blog>): Single<List<Blog>> =
-        if (blogs.isEmpty()) {
+        return if (blogs.isEmpty()) {
             updateSearchHistory(
                 fun1 = { naverSearchLocalDataSource.clearBlogResult() },
                 fun2 = { naverSearchLocalDataSource.saveBlogKeyword(keyword) }
             )
-                .toSingle { blogs }
+                .toSingle { blogRepo }
         } else {
-            val blogList = ensureBlogEntityList(blogs)
             updateSearchHistory(
                 fun1 = { naverSearchLocalDataSource.clearBlogResult() },
                 fun2 = { naverSearchLocalDataSource.saveBlogKeyword(keyword) },
-                fun3 = { naverSearchLocalDataSource.saveBlogResult(blogList) }
+                fun3 = {
+                    naverSearchLocalDataSource.saveBlogResult(
+                        blogs.map { BlogDataMapper.map(it) }
+                    )
+                }
             )
-                .toSingle { blogs }
+                .toSingle { blogRepo }
         }
-
-    private fun ensureBlogEntityList(blogs: List<Blog>): List<BlogEntity> =
-        arrayListOf<BlogEntity>().apply {
-            blogs.mapTo(this) { blog ->
-                BlogEntity(
-                    bloggerLink = blog.bloggerLink,
-                    bloggerName = blog.bloggerName,
-                    description = blog.description,
-                    link = blog.link,
-                    postdate = blog.postdate,
-                    title = blog.title
-                )
-            }
-        }
-
-    override fun getLatestMovieKeyword(): String =
-        naverSearchLocalDataSource.getLatestMovieKeyword()
-
-    override fun getLatestImageKeyword(): String =
-        naverSearchLocalDataSource.getLatestImageKeyword()
-
-    override fun getLatestBlogKeyword(): String =
-        naverSearchLocalDataSource.getLatestBlogKeyword()
+    }
 
     private fun updateSearchHistory(
         fun1: () -> Unit,

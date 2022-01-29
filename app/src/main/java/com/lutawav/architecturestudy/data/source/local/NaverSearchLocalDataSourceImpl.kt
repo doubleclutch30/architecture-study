@@ -7,9 +7,7 @@ import com.lutawav.architecturestudy.data.database.SearchHistoryDatabase
 import com.lutawav.architecturestudy.data.database.entity.BlogEntity
 import com.lutawav.architecturestudy.data.database.entity.ImageEntity
 import com.lutawav.architecturestudy.data.database.entity.MovieEntity
-import com.lutawav.architecturestudy.data.model.Blog
-import com.lutawav.architecturestudy.data.model.Image
-import com.lutawav.architecturestudy.data.model.Movie
+import com.lutawav.architecturestudy.data.model.*
 import com.lutawav.architecturestudy.data.source.local.NaverSearchLocalDataSource.Companion.PREFS_KEY_BLOG
 import com.lutawav.architecturestudy.data.source.local.NaverSearchLocalDataSource.Companion.PREFS_KEY_IMAGE
 import com.lutawav.architecturestudy.data.source.local.NaverSearchLocalDataSource.Companion.PREFS_KEY_MOVIE
@@ -29,59 +27,25 @@ object NaverSearchLocalDataSourceImpl : NaverSearchLocalDataSource {
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
 
-    override fun getMovie(): Single<List<Movie>> =
+    override fun getMovie(): Single<MovieLocalData> =
         searchHistoryDatabase.movieDao()
             .getAll()
             .map {
-                val movies = arrayListOf<Movie>()
-                it.mapTo(movies) { entity ->
-                    Movie(
-                        title = entity.title,
-                        link = entity.link,
-                        subtitle = entity.subtitle,
-                        actor = entity.actor,
-                        pubDate = entity.pubDate,
-                        _userRating = (entity.userRating * 2.toFloat()).toString(),
-                        image = entity.image,
-                        director = entity.director
-                    )
-                }
-                movies
+               MovieLocalData(it)
             }
 
-    override fun getImage(): Single<List<Image>> =
+    override fun getImage(): Single<ImageLocalData> =
         searchHistoryDatabase.imageDao()
             .getAll()
             .map {
-                val images = arrayListOf<Image>()
-                it.mapTo(images) { entity ->
-                    Image(
-                        link = entity.link,
-                        sizeHeight = entity.sizeHeight,
-                        sizeWidth = entity.sizeWidth,
-                        thumbnail = entity.thumbnail,
-                        title = entity.title
-                    )
-                }
-                images
+                ImageLocalData(it)
             }
 
-    override fun getBlog(): Single<List<Blog>> =
+    override fun getBlog(): Single<BlogLocalData> =
         searchHistoryDatabase.blogDao()
             .getAll()
             .map {
-                val blogs = arrayListOf<Blog>()
-                it.mapTo(blogs) { entity ->
-                    Blog(
-                        bloggerLink = entity.bloggerLink,
-                        bloggerName = entity.bloggerName,
-                        description = entity.description,
-                        link = entity.link,
-                        postdate = entity.postdate,
-                        title = entity.title
-                    )
-                }
-                blogs
+                BlogLocalData(it)
             }
 
     override fun saveMovieResult(movies: List<MovieEntity>) {
