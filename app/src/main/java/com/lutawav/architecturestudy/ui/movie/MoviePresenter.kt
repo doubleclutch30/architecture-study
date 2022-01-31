@@ -37,11 +37,9 @@ class MoviePresenter(
             .subscribe({ movieRepo ->
                 val movies = movieRepo.movies
                 if (movies.isEmpty()) {
-                    view.hideResultListView()
-                    view.showEmptyResultView()
+
                 } else {
-                    view.hideEmptyResultView()
-                    view.showResultListView()
+
                 }
                 view.updateResult(movies)
             }, { e ->

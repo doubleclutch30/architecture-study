@@ -11,6 +11,7 @@ import com.lutawav.architecturestudy.R
 import com.lutawav.architecturestudy.data.model.Movie
 import com.lutawav.architecturestudy.databinding.FragmentMovieBinding
 import com.lutawav.architecturestudy.ui.BaseFragment
+import com.lutawav.architecturestudy.ui.BaseSearchContract
 import com.lutawav.architecturestudy.util.then
 
 class MovieFragment : BaseFragment<FragmentMovieBinding>(
@@ -23,6 +24,14 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>(
 
     private lateinit var movieAdapter: MovieAdapter
 
+    override var viewType: BaseSearchContract.ViewType = BaseSearchContract.ViewType.VIEW_SEARCH_BEFORE
+        set(value) {
+            if (field != value) {
+                field = value
+                binding.viewType = field
+                binding.invalidateAll()
+            }
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -55,33 +64,17 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>(
         keyword.isNotBlank().then {
             binding.searchBar.keyword = keyword
 
-            if (movies.isEmpty()) {
-                hideResultListView()
-                showEmptyResultView()
-                Log.e("updateUi", "empty")
-            } else {
-                hideEmptyResultView()
-                showResultListView()
+            movies.isNotEmpty().then {
                 movieAdapter.setData(movies)
-                Log.e("updateUi", "ok")
             }
+
+            viewType = when {
+                movies.isEmpty() -> BaseSearchContract.ViewType.VIEW_SEARCH_NO_RESULT
+                else -> BaseSearchContract.ViewType.VIEW_SEARCH_SUCCESS
+            }
+
+            binding.invalidateAll()
         }
-    }
-
-    override fun showEmptyResultView() {
-        binding.emptyResultView.visibility = View.VISIBLE
-    }
-
-    override fun showResultListView() {
-        binding.movieRecyclerView.visibility = View.VISIBLE
-    }
-
-    override fun hideEmptyResultView() {
-        binding.emptyResultView.visibility = View.GONE
-    }
-
-    override fun hideResultListView() {
-        binding.movieRecyclerView.visibility = View.GONE
     }
 
     override fun search(keyword: String) {
@@ -89,10 +82,17 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>(
     }
 
     override fun updateResult(result: List<Movie>) {
+        viewType = when {
+            result.isEmpty() -> BaseSearchContract.ViewType.VIEW_SEARCH_NO_RESULT
+            else -> BaseSearchContract.ViewType.VIEW_SEARCH_SUCCESS
+        }
+
         if (result.isEmpty()) {
             movieAdapter.clear()
         } else {
             movieAdapter.setData(result)
         }
+
+        binding.invalidateAll()
     }
 }

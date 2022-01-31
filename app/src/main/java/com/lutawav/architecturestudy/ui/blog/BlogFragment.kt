@@ -10,6 +10,7 @@ import com.lutawav.architecturestudy.R
 import com.lutawav.architecturestudy.data.model.Blog
 import com.lutawav.architecturestudy.databinding.FragmentBlogBinding
 import com.lutawav.architecturestudy.ui.BaseFragment
+import com.lutawav.architecturestudy.ui.BaseSearchContract
 import com.lutawav.architecturestudy.util.then
 
 class BlogFragment : BaseFragment<FragmentBlogBinding>(
@@ -27,6 +28,16 @@ class BlogFragment : BaseFragment<FragmentBlogBinding>(
 
         initViews()
     }
+
+    override var viewType: BaseSearchContract.ViewType =
+        BaseSearchContract.ViewType.VIEW_SEARCH_BEFORE
+        set(value) {
+            if (field != value) {
+                field = value
+                binding.viewType = value
+                binding.invalidateAll()
+            }
+        }
 
     private fun initViews() {
         blogAdapter = BlogAdapter()
@@ -49,35 +60,21 @@ class BlogFragment : BaseFragment<FragmentBlogBinding>(
         presenter.unsubscribe()
     }
 
-    override fun updateUi(keyword: String, blog: List<Blog>) {
-        keyword.isNotEmpty().then {
+    override fun updateUi(keyword: String, blogs: List<Blog>) {
+        keyword.isNotBlank().then {
             binding.searchBar.keyword = keyword
 
-            if (blog.isEmpty()) {
-                hideResultListView()
-                showEmptyResultView()
-            } else {
-                hideEmptyResultView()
-                showResultListView()
-                blogAdapter.setData(blog)
+            viewType = when {
+                blogs.isEmpty() -> BaseSearchContract.ViewType.VIEW_SEARCH_NO_RESULT
+                else -> BaseSearchContract.ViewType.VIEW_SEARCH_SUCCESS
             }
+
+            blogs.isNotEmpty().then {
+                blogAdapter.setData(blogs)
+            }
+
+            binding.invalidateAll()
         }
-    }
-
-    override fun showEmptyResultView() {
-        binding.emptyResultView.visibility = View.VISIBLE
-    }
-
-    override fun showResultListView() {
-        binding.blogRecyclerView.visibility = View.VISIBLE
-    }
-
-    override fun hideEmptyResultView() {
-        binding.emptyResultView.visibility = View.GONE
-    }
-
-    override fun hideResultListView() {
-        binding.blogRecyclerView.visibility = View.GONE
     }
 
     override fun search(keyword: String) {
@@ -85,10 +82,17 @@ class BlogFragment : BaseFragment<FragmentBlogBinding>(
     }
 
     override fun updateResult(result: List<Blog>) {
+        viewType = when {
+            result.isEmpty() -> BaseSearchContract.ViewType.VIEW_SEARCH_NO_RESULT
+            else -> BaseSearchContract.ViewType.VIEW_SEARCH_SUCCESS
+        }
+
         if (result.isEmpty()) {
             blogAdapter.clear()
         } else {
             blogAdapter.setData(result)
         }
+
+        binding.invalidateAll()
     }
 }
