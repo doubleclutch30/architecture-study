@@ -5,7 +5,18 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+<!--        <variable-->
+<!--            name="title"-->
+<!--            type="String" />-->
+<!--        <variable-->
+<!--            name="imageUrl"-->
+<!--            type="String" />-->
+<!--        <variable-->
+<!--            name="url"-->
+<!--            type="String" />-->
+        <variable
+            name="image"
+            type="com.lutawav.architecturestudy.data.model.Image" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,6 +45,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
+                    app:loadImage="@{image.thumbnail}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -53,6 +65,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/image_thumbnail"
+                    android:text="@{image.title}"
                     tools:text="코로나 시대를 거치면서 에너지 가격이 폭등하고 공급망 위기가 닥친 마당에 누구도 정책 변화를 거론하지 않아 자원전쟁 시대에 한국이 낙오할지 모른다는 위기감이 커지고 있다." />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

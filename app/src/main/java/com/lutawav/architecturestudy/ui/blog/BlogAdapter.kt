@@ -2,7 +2,6 @@ package com.lutawav.architecturestudy.ui.blog
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.text.HtmlCompat
 import com.lutawav.architecturestudy.data.model.Blog
 import com.lutawav.architecturestudy.databinding.ItemBlogBinding
 import com.lutawav.architecturestudy.ui.BaseAdapter
@@ -22,19 +21,16 @@ internal class BlogAdapter : BaseAdapter<Blog, BlogViewHolder>() {
     }
 }
 
-internal class BlogViewHolder(private val binding: ItemBlogBinding) :
-    BaseViewHolder<Blog>(binding) {
+internal class BlogViewHolder(
+    private val binding: ItemBlogBinding
+) : BaseViewHolder<Blog>(binding) {
 
-    override fun bind(blog: Blog) {
-        binding.blogTitle.text =
-            HtmlCompat.fromHtml(blog.title, HtmlCompat.FROM_HTML_MODE_COMPACT)
-        binding.blogDescription.text =
-            HtmlCompat.fromHtml(blog.description, HtmlCompat.FROM_HTML_MODE_COMPACT)
-        binding.blogOwner.text = blog.bloggerName
-        binding.blogPostdate.text = blog.postdate
+    override fun bind(item: Blog) {
+        binding.blog = item
+        binding.executePendingBindings()
 
         binding.root.setOnClickListener { view ->
-            view.startWebView(blog.link)
+            view.startWebView(item.link)
         }
     }
 }

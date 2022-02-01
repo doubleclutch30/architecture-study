@@ -37,11 +37,9 @@ class BlogPresenter(
             .subscribe({ blogRepo ->
                 val blogs = blogRepo.blogs
                 if (blogs.isEmpty()) {
-                    view.hideResultListView()
-                    view.showEmptyResultView()
+
                 } else {
-                    view.hideEmptyResultView()
-                    view.showResultListView()
+
                 }
                 view.updateResult(blogs)
             }, { e ->

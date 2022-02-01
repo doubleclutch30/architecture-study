@@ -4,7 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="keyword"
+            type="String" />
+        <variable
+            name="view"
+            type="com.lutawav.architecturestudy.widget.NaverSearchBarView" />
+        <variable
+            name="clickEvent"
+            type="com.lutawav.architecturestudy.widget.SearchButtonClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,6 +26,7 @@
             android:layout_marginRight="10dp"
             android:gravity="center|left"
             android:lines="1"
+            android:text="@{keyword}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/search_btn"
@@ -29,6 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/search"
+            android:onClick="@{(v) -> clickEvent.onClick(v, searchEditor.getText().toString())}"
             app:layout_constraintStart_toEndOf="@+id/search_editor"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

@@ -1,5 +1,6 @@
 package com.lutawav.architecturestudy.ui
 
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 
@@ -27,7 +28,7 @@ abstract class BaseAdapter<T, H: BaseViewHolder<T>>
 }
 
 abstract class BaseViewHolder<T>(
-    binding: ViewBinding
+    binding: ViewDataBinding
 ) : RecyclerView.ViewHolder(binding.root) {
     abstract fun bind(item: T)
 }

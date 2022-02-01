@@ -2,7 +2,6 @@ package com.lutawav.architecturestudy.ui.image
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
 import com.lutawav.architecturestudy.data.model.Image
 import com.lutawav.architecturestudy.databinding.ItemImageBinding
 import com.lutawav.architecturestudy.ui.BaseAdapter
@@ -22,19 +21,18 @@ internal class ImageAdapter : BaseAdapter<Image, ImageViewHolder>() {
     }
 }
 
-internal class ImageViewHolder(private val binding: ItemImageBinding) :
-    BaseViewHolder<Image>(binding) {
+internal class ImageViewHolder(
+    private val binding: ItemImageBinding
+) : BaseViewHolder<Image>(binding) {
 
-    override fun bind(image: Image) {
-        binding.imageTitle.text = image.title
-
-        Glide.with(binding.imageThumbnail.context)
-            .load(image.thumbnail)
-            .into(binding.imageThumbnail)
-
+    override fun bind(item: Image) {
+//        binding.title = item.title
+//        binding.imageUrl = item.thumbnail
+//        binding.url = item.link
+        binding.image = item
+        binding.executePendingBindings()
         binding.root.setOnClickListener { view ->
-            view.startWebView(image.link)
+            view.startWebView(item.link)
         }
     }
-
 }

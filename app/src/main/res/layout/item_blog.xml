@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="blog"
+            type="com.lutawav.architecturestudy.data.model.Blog" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,6 +18,7 @@
             android:id="@+id/blog_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            app:htmlText="@{blog.title}"
             android:maxLines="1"
             android:ellipsize="end"
             android:textSize="17dp"
@@ -30,6 +33,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            app:htmlText="@{blog.description}"
             android:maxLines="4"
             android:ellipsize="end"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,6 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:text="@{blog.bloggerName}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/blog_description"
             tools:text="블로그 주인" />
@@ -50,6 +55,7 @@
             android:id="@+id/blog_postdate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{blog.postdate}"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="5dp"
             app:layout_constraintStart_toEndOf="@+id/blog_owner"

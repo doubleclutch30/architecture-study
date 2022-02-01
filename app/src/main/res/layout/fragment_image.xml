@@ -30,12 +30,13 @@
             android:id="@+id/image_RecyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/search_bar"
+            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
             tools:listitem="@layout/item_image"
+            tools:visibility="gone"
             visible="@{viewType == ViewType.VIEW_SEARCH_NO_RESULT ? false : true}" />
 
         <TextView
@@ -45,7 +46,6 @@
             android:layout_marginTop="10dp"
             android:gravity="center"
             android:textSize="25sp"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/search_bar"
             tools:text="@string/error_empty_result"
