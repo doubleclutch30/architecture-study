@@ -5,25 +5,20 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-<!--        <variable-->
-<!--            name="title"-->
-<!--            type="String" />-->
-<!--        <variable-->
-<!--            name="imageUrl"-->
-<!--            type="String" />-->
-<!--        <variable-->
-<!--            name="url"-->
-<!--            type="String" />-->
         <variable
             name="image"
             type="com.lutawav.architecturestudy.data.model.Image" />
+
+        <variable
+            name="click"
+            type="com.lutawav.architecturestudy.ui.OnItemClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
-
+        android:padding="10dp"
+        android:onClick="@{(v) -> click.onClick(v, image.link)" >
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -34,11 +29,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            card_view:cardCornerRadius="10dp">
+            card_view:cardCornerRadius="10dp" >
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content" >
 
                 <ImageView
                     android:id="@+id/image_thumbnail"

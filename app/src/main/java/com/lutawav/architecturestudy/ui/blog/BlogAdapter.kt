@@ -1,11 +1,13 @@
 package com.lutawav.architecturestudy.ui.blog
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import com.lutawav.architecturestudy.data.model.Blog
 import com.lutawav.architecturestudy.databinding.ItemBlogBinding
 import com.lutawav.architecturestudy.ui.BaseAdapter
 import com.lutawav.architecturestudy.ui.BaseViewHolder
+import com.lutawav.architecturestudy.ui.OnItemClickListener
 import com.lutawav.architecturestudy.util.startWebView
 
 internal class BlogAdapter : BaseAdapter<Blog, BlogViewHolder>() {
@@ -23,14 +25,18 @@ internal class BlogAdapter : BaseAdapter<Blog, BlogViewHolder>() {
 
 internal class BlogViewHolder(
     private val binding: ItemBlogBinding
-) : BaseViewHolder<Blog>(binding) {
+) : BaseViewHolder<Blog>(binding), OnItemClickListener {
+
+    init {
+        binding.click = this
+    }
 
     override fun bind(item: Blog) {
         binding.blog = item
         binding.executePendingBindings()
+    }
 
-        binding.root.setOnClickListener { view ->
-            view.startWebView(item.link)
-        }
+    override fun onClick(v: View, url: String) {
+        v.startWebView(url)
     }
 }

@@ -1,5 +1,6 @@
 package com.lutawav.architecturestudy.ui
 
+import android.view.View
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
@@ -31,4 +32,8 @@ abstract class BaseViewHolder<T>(
     binding: ViewDataBinding
 ) : RecyclerView.ViewHolder(binding.root) {
     abstract fun bind(item: T)
+}
+
+interface OnItemClickListener {
+    fun onClick(v: View, url: String)
 }
