@@ -32,12 +32,6 @@ class BlogViewModel(
         repository.getBlog(
             keyword = keyword
         )
-            .flatMap {
-                repository.refreshBlogSearchHistory(
-                    keyword = keyword,
-                    blogs = it.blogs
-                )
-            }
             .compose(singleIoMainThread())
             .subscribe({ blogRepo ->
                 viewType.set(

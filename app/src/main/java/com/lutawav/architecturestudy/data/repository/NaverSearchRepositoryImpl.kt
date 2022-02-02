@@ -26,17 +26,10 @@ class NaverSearchRepositoryImpl(
                     movies = it.movies
                 )
             }
-
-    override fun getBlog(
-        keyword: String
-    ): Single<BlogRepo> =
-        naverSearchRemoteDataSource.getBlog(
-            keyword = keyword
-        )
-            .map {
-                BlogRepo(
+            .flatMap {
+                refreshMovieSearchHistory(
                     keyword = keyword,
-                    blogs = it.blogs
+                    movies = it.movies
                 )
             }
 
@@ -50,6 +43,31 @@ class NaverSearchRepositoryImpl(
                 ImageRepo(
                     keyword = keyword,
                     images = it.images
+                )
+            }
+            .flatMap {
+                refreshImageSearchHistory(
+                    keyword = keyword,
+                    images = it.images
+                )
+            }
+
+    override fun getBlog(
+        keyword: String
+    ): Single<BlogRepo> =
+        naverSearchRemoteDataSource.getBlog(
+            keyword = keyword
+        )
+            .map {
+                BlogRepo(
+                    keyword = keyword,
+                    blogs = it.blogs
+                )
+            }
+            .flatMap {
+                refreshBlogSearchHistory(
+                    keyword = keyword,
+                    blogs = it.blogs
                 )
             }
 
