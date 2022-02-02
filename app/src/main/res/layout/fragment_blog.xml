@@ -4,27 +4,50 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.lutawav.architecturestudy.ui.BaseSearchContract.ViewType" />
+        <import type="com.lutawav.architecturestudy.ui.ViewType" />
         <variable
-            name="viewType"
-            type="com.lutawav.architecturestudy.ui.BaseSearchContract.ViewType" />
+            name="vm"
+            type="com.lutawav.architecturestudy.ui.blog.BlogViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.lutawav.architecturestudy.widget.NaverSearchBarView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/search_bar"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
+            <EditText
+                android:id="@+id/search_editor"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginRight="10dp"
+                android:lines="1"
+                android:text="@={vm.keyword}"
+                android:hint="@string/warn_input_keyword"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/search_btn"
+                app:layout_constraintBottom_toBottomOf="@+id/search_btn"
+                tools:text="검색 검색 검색 검색 검색 검색 검색 검색 검색 검색 검색 검색" />
+
+            <Button
+                android:id="@+id/search_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search"
+                android:onClick="@{(v) -> vm.onClick(v, vm.keyword)}"
+                app:layout_constraintStart_toEndOf="@+id/search_editor"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/blog_RecyclerView"
@@ -36,7 +59,7 @@
             app:layout_constraintTop_toBottomOf="@+id/search_bar"
             tools:listitem="@layout/item_blog"
             tools:visibility="gone"
-            visible="@{viewType == ViewType.VIEW_SEARCH_NO_RESULT ? false : true"/>
+            visible="@{vm.ViewType == ViewType.VIEW_SEARCH_NO_RESULT ? false : true"/>
 
         <TextView
             android:id="@+id/empty_result_view"
@@ -50,7 +73,7 @@
             app:layout_constraintTop_toBottomOf="@+id/search_bar"
             tools:text="@string/error_empty_result"
             tools:visibility="visible"
-            visible="@{viewType == ViewType.VIEW_SEARCH_NO_RESULT ? true : false" />
+            visible="@{vm.ViewType == ViewType.VIEW_SEARCH_NO_RESULT ? true : false" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
