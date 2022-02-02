@@ -6,7 +6,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.text.HtmlCompat
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.lutawav.architecturestudy.ui.BaseAdapter
 
 @BindingAdapter("htmlText")
 fun TextView.setText(title: String) {
@@ -27,6 +29,13 @@ fun ImageView.loadImage(url: String) {
             .into(this)
     } catch (e: Exception) {
         Log.e("ImageViewExt", "error=${e.message}")
+    }
+}
+
+@BindingAdapter("setItems")
+fun RecyclerView.setItems(items: List<Any>?) {
+    with((adapter as BaseAdapter<Any, *>)) {
+        items?.let { setData(it) }
     }
 }
 
