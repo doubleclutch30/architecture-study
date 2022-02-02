@@ -1,26 +1,31 @@
 package com.lutawav.architecturestudy.ui.blog
 
 import android.util.Log
+import androidx.databinding.ObservableField
+import com.lutawav.architecturestudy.data.model.Blog
 import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
-import com.lutawav.architecturestudy.ui.BaseSearchPresenter
+import com.lutawav.architecturestudy.ui.BaseViewModel
+import com.lutawav.architecturestudy.ui.ViewType
 import com.lutawav.architecturestudy.util.addTo
 import com.lutawav.architecturestudy.util.singleIoMainThread
 
-class BlogPresenter(
-    override val view: BlogContract.View,
+class BlogViewModel(
     override val repository: NaverSearchRepositoryImpl
-) : BaseSearchPresenter(view, repository), BlogContract.Presenter {
+) : BaseViewModel<Blog>(repository){
 
-    override fun subscribe() {
+    override val data: ObservableField<List<Blog>> = ObservableField()
+
+    override fun init() {
         repository.getLatestBlogResult()
             .compose(singleIoMainThread())
             .subscribe({
-                view.updateUi(it.keyword, it.blogs)
+                keyword.set(it.keyword)
+                data.set(it.blogs)
             }, { e ->
                 val message = e.message ?: return@subscribe
                 Log.e("blog", message)
             })
-            .addTo(disposable)
+            .addTo(compositeDisposable)
     }
 
     override fun search(keyword: String) {
@@ -35,16 +40,18 @@ class BlogPresenter(
             }
             .compose(singleIoMainThread())
             .subscribe({ blogRepo ->
-                val blogs = blogRepo.blogs
-                if (blogs.isEmpty()) {
-
-                } else {
-
-                }
-                view.updateResult(blogs)
+                viewType.set(
+                    if (blogRepo.blogs.isEmpty()) {
+                        ViewType.VIEW_SEARCH_NO_RESULT
+                    } else {
+                        ViewType.VIEW_SEARCH_SUCCESS
+                    }
+                )
+                data.set(blogRepo.blogs)
             }, { e ->
-                handleError(e)
+                val message = e.message ?: return@subscribe
+                errorMsg.set(message)
             })
-            .addTo(disposable)
+            .addTo(compositeDisposable)
     }
 }

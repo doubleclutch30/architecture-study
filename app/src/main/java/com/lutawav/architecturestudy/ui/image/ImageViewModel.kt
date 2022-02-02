@@ -1,26 +1,31 @@
 package com.lutawav.architecturestudy.ui.image
 
 import android.util.Log
+import androidx.databinding.ObservableField
+import com.lutawav.architecturestudy.data.model.Image
 import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
-import com.lutawav.architecturestudy.ui.BaseSearchPresenter
+import com.lutawav.architecturestudy.ui.BaseViewModel
+import com.lutawav.architecturestudy.ui.ViewType
 import com.lutawav.architecturestudy.util.addTo
 import com.lutawav.architecturestudy.util.singleIoMainThread
 
-class ImagePresenter(
-    override val view: ImageContract.View,
+class ImageViewModel(
     override val repository: NaverSearchRepositoryImpl
-) : BaseSearchPresenter(view, repository), ImageContract.Presenter {
+) : BaseViewModel<Image>(repository) {
 
-    override fun subscribe() {
+    override val data: ObservableField<List<Image>> = ObservableField()
+
+    override fun init() {
         repository.getLatestImageResult()
             .compose(singleIoMainThread())
             .subscribe({
-                view.updateUi(it.keyword, it.images)
+                keyword.set(it.keyword)
+                data.set(it.images)
             }, { e ->
                 val message = e.message ?: return@subscribe
                 Log.e("image", message)
             })
-            .addTo(disposable)
+            .addTo(compositeDisposable)
     }
 
     override fun search(keyword: String) {
@@ -35,16 +40,18 @@ class ImagePresenter(
             }
             .compose(singleIoMainThread())
             .subscribe({ imageRepo ->
-                val images = imageRepo.images
-                if (images.isEmpty()) {
-
-                } else {
-
-                }
-                view.updateResult(images)
+                viewType.set(
+                    if (imageRepo.images.isEmpty()) {
+                        ViewType.VIEW_SEARCH_NO_RESULT
+                    } else {
+                        ViewType.VIEW_SEARCH_SUCCESS
+                    }
+                )
+                data.set(imageRepo.images)
             }, { e ->
-                handleError(e)
+                val message = e.message ?: return@subscribe
+                errorMsg.set(message)
             })
-            .addTo(disposable)
+            .addTo(compositeDisposable)
     }
 }

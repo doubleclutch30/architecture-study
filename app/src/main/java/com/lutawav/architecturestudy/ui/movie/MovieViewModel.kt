@@ -1,29 +1,35 @@
 package com.lutawav.architecturestudy.ui.movie
 
 import android.util.Log
+import androidx.databinding.ObservableField
+import com.lutawav.architecturestudy.data.model.Movie
 import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
-import com.lutawav.architecturestudy.ui.BaseSearchPresenter
+import com.lutawav.architecturestudy.ui.BaseViewModel
+import com.lutawav.architecturestudy.ui.ViewType
 import com.lutawav.architecturestudy.util.addTo
 import com.lutawav.architecturestudy.util.singleIoMainThread
 
-class MoviePresenter(
-    override val view: MovieContract.View,
+class MovieViewModel(
     override val repository: NaverSearchRepositoryImpl
-) : BaseSearchPresenter(view, repository), MovieContract.Presenter {
+) : BaseViewModel<Movie>(repository) {
+    override val data: ObservableField<List<Movie>> = ObservableField()
 
-    override fun subscribe() {
+    override fun init() {
         repository.getLatestMovieResult()
             .compose(singleIoMainThread())
             .subscribe({
-                view.updateUi(it.keyword, it.movies)
+                keyword.set(it.keyword)
+                data.set(it.movies)
             }, { e ->
                 val message = e.message ?: return@subscribe
                 Log.e("movie", message)
             })
-            .addTo(disposable)
+            .addTo(compositeDisposable)
     }
 
     override fun search(keyword: String) {
+        Log.e("movie", keyword)
+
         repository.getMovie(
             keyword = keyword
         )
@@ -35,16 +41,18 @@ class MoviePresenter(
             }
             .compose(singleIoMainThread())
             .subscribe({ movieRepo ->
-                val movies = movieRepo.movies
-                if (movies.isEmpty()) {
-
-                } else {
-
-                }
-                view.updateResult(movies)
+                viewType.set(
+                    if (movieRepo.movies.isEmpty()) {
+                        ViewType.VIEW_SEARCH_NO_RESULT
+                    } else {
+                        ViewType.VIEW_SEARCH_SUCCESS
+                    }
+                )
+                data.set(movieRepo.movies)
             }, { e ->
-                handleError(e)
+                val message = e.message ?: return@subscribe
+                errorMsg.set(message)
             })
-            .addTo(disposable)
+            .addTo(compositeDisposable)
     }
 }

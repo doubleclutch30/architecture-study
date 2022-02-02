@@ -1,5 +1,6 @@
 package com.lutawav.architecturestudy.ui
 
+import android.util.Log
 import android.view.View
 import androidx.databinding.ObservableField
 import com.lutawav.architecturestudy.data.repository.NaverSearchRepository
@@ -9,7 +10,7 @@ import io.reactivex.disposables.CompositeDisposable
 abstract class BaseViewModel<T>(
     protected open val repository: NaverSearchRepository
 ) {
-    val viewType = ObservableField<ViewType>(ViewType.VIEW_SEARCH_BEFORE)
+    val viewType = ObservableField(ViewType.VIEW_SEARCH_BEFORE)
     val errorMsg = ObservableField<String?>()
     val keyword = ObservableField<String?>()
     val invalidKeyword = ObservableField<Boolean>()
@@ -28,6 +29,7 @@ abstract class BaseViewModel<T>(
         if (System.currentTimeMillis() - lastClickTime < debounceTime) {
             return
         }
+        Log.d("BaseViewModel", "keyword: $keyword")
         if (keyword.isBlank()) {
             invalidKeyword.set(true)
         } else {
