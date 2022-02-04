@@ -71,6 +71,9 @@ dependencies {
     implementation "androidx.room:room-rxjava2:2.4.1"
     kapt "androidx.room:room-compiler:2.4.1"
 
+    // extensions
+    implementation "androidx.lifecycle:lifecycle-extensions:2.1.0"
+
     // db test
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
 
