@@ -33,6 +33,7 @@ class BlogFragment : BaseFragment<FragmentBlogBinding, BlogViewModel>(R.layout.f
         }
 
         binding.vm = viewModel
+        binding.lifecycleOwner = this
         viewModel.init()
     }
 

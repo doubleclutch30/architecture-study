@@ -1,7 +1,9 @@
 package com.lutawav.architecturestudy.ui.image
 
 import android.util.Log
-import androidx.databinding.ObservableField
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.lutawav.architecturestudy.data.model.Image
 import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
 import com.lutawav.architecturestudy.ui.BaseViewModel
@@ -13,14 +15,25 @@ class ImageViewModel(
     override val repository: NaverSearchRepositoryImpl
 ) : BaseViewModel<Image>(repository) {
 
-    override val data: ObservableField<List<Image>> = ObservableField()
+    override val _data: MutableLiveData<List<Image>> = MutableLiveData()
+
+    val data: LiveData<List<Image>>
+        get() = _data
+
+    val viewType = Transformations.map(data) { list ->
+        if (list.isNotEmpty()) {
+            ViewType.VIEW_SEARCH_RESULT
+        } else {
+            ViewType.VIEW_SEARCH_NO_RESULT
+        }
+    }
 
     override fun init() {
         repository.getLatestImageResult()
             .compose(singleIoMainThread())
             .subscribe({
-                keyword.set(it.keyword)
-                data.set(it.images)
+                keyword.value = it.keyword
+                _data.value = it.images
             }, { e ->
                 val message = e.message ?: return@subscribe
                 Log.e("image", message)
@@ -34,17 +47,10 @@ class ImageViewModel(
         )
             .compose(singleIoMainThread())
             .subscribe({ imageRepo ->
-                viewType.set(
-                    if (imageRepo.images.isEmpty()) {
-                        ViewType.VIEW_SEARCH_NO_RESULT
-                    } else {
-                        ViewType.VIEW_SEARCH_SUCCESS
-                    }
-                )
-                data.set(imageRepo.images)
+                _data.value = imageRepo.images
             }, { e ->
                 val message = e.message ?: return@subscribe
-                errorMsg.set(message)
+                errorMsg.value = message
             })
             .addTo(compositeDisposable)
     }

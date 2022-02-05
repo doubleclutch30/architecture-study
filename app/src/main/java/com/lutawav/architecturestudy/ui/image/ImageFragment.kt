@@ -32,6 +32,7 @@ class ImageFragment : BaseFragment<FragmentImageBinding, ImageViewModel>(R.layou
         }
 
         binding.vm = viewModel
+        binding.lifecycleOwner = this
         viewModel.init()
     }
 

@@ -34,6 +34,7 @@ class MovieFragment : BaseFragment<FragmentMovieBinding, MovieViewModel>(R.layou
         }
 
         binding.vm = viewModel
+        binding.lifecycleOwner = this
         viewModel.init()
     }
 

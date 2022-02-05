@@ -61,7 +61,8 @@
             app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
             tools:listitem="@layout/item_image"
             tools:visibility="gone"
-            visible="@{vm.ViewType == ViewType.VIEW_SEARCH_NO_RESULT ? false : true}" />
+            setItems="@{vm.data}"
+            visible="@{vm.viewType == ViewType.VIEW_SEARCH_NO_RESULT ? false : true}" />
 
         <TextView
             android:id="@+id/empty_result_view"
@@ -74,7 +75,7 @@
             app:layout_constraintTop_toBottomOf="@+id/search_bar"
             tools:text="@string/error_empty_result"
             tools:visibility="visible"
-            visible="@{vm.ViewType == ViewType.VIEW_SEARCH_NO_RESULT ? true : false}" />
+            visible="@{vm.viewType == ViewType.VIEW_SEARCH_NO_RESULT ? true : false}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

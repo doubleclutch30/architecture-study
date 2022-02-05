@@ -1,9 +1,6 @@
 package com.lutawav.architecturestudy.ui
 
-import android.util.Log
 import android.view.View
-import androidx.databinding.ObservableField
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lutawav.architecturestudy.data.repository.NaverSearchRepository
@@ -40,7 +37,7 @@ abstract class BaseViewModel<T>(
         }
     }
 
-    override fun onCleared() {
+    public override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()
     }

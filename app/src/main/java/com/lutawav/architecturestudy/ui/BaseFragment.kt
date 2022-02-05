@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.Observable
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.lutawav.architecturestudy.R
 import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
 import com.lutawav.architecturestudy.data.source.local.NaverSearchLocalDataSourceImpl
@@ -43,30 +43,23 @@ abstract class BaseFragment<T : ViewDataBinding, VM : BaseViewModel<*>>(
     }
 
     private fun initModelCallBack() {
-        viewModel.errorMsg.addOnPropertyChangedCallback(object :
-            Observable.OnPropertyChangedCallback() {
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                val message = viewModel.errorMsg.get() ?: return
-                viewModel.errorMsg.set(null)
-                showErrorMessage(message)
+        viewModel.errorMsg.observe(viewLifecycleOwner, Observer {
+            it.isBlank().then {
+                showErrorMessage(it)
             }
         })
 
-        viewModel.invalidKeyword.addOnPropertyChangedCallback(object :
-            Observable.OnPropertyChangedCallback() {
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                val invalid = viewModel.invalidKeyword.get() ?: return
-                invalid.then {
-                    context?.let {
-                        showErrorMessage(it.getString(R.string.warn_input_keyword))
-                    }
-                    viewModel.invalidKeyword.set(false)
+        viewModel.invalidKeyword.observe(viewLifecycleOwner, Observer {
+            it.then {
+                context?.let {
+                    showErrorMessage(it.getString(R.string.warn_input_keyword))
                 }
             }
         })
+
     }
 
-    fun showErrorMessage(message: String) {
+    private fun showErrorMessage(message: String) {
         context?.showToastMessage(message)
     }
 }
