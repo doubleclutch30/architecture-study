@@ -5,6 +5,8 @@
 
     <data>
         <import type="com.lutawav.architecturestudy.ui.ViewType" />
+        <import type="android.view.View" />
+
         <variable
             name="vm"
             type="com.lutawav.architecturestudy.ui.blog.BlogViewModel" />
@@ -75,6 +77,16 @@
             tools:text="@string/error_empty_result"
             tools:visibility="visible"
             visible="@{vm.ViewType == ViewType.VIEW_SEARCH_NO_RESULT ? true : false" />
+
+        <ProgressBar
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:visibility="@{vm.isLoading() ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

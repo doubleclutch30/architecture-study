@@ -16,8 +16,11 @@ class BlogViewModel(
 ) : BaseViewModel<Blog>(repository) {
 
     override val _data: MutableLiveData<List<Blog>> = MutableLiveData()
-    val data: LiveData<List<Blog>>
-        get() = _data
+    private val _isLoading: MutableLiveData<Boolean> = MutableLiveData()
+
+    val data: LiveData<List<Blog>> get() = _data
+    val isLoading: LiveData<Boolean> get() = _isLoading
+
 
     val viewType = Transformations.map(data) { list ->
         if (list.isNotEmpty()) {
@@ -30,6 +33,8 @@ class BlogViewModel(
     override fun init() {
         repository.getLatestBlogResult()
             .compose(singleIoMainThread())
+            .doOnSubscribe { _isLoading.value = true }
+            .doAfterTerminate { _isLoading.value = false }
             .subscribe({
                 keyword.value = it.keyword
                 _data.value = it.blogs
@@ -45,6 +50,8 @@ class BlogViewModel(
             keyword = keyword
         )
             .compose(singleIoMainThread())
+            .doOnSubscribe { _isLoading.value = true }
+            .doAfterTerminate { _isLoading.value = false }
             .subscribe({ blogRepo ->
                 _data.value = blogRepo.blogs
             }, { e ->

@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.lutawav.architecturestudy.data.model.Image
+import com.lutawav.architecturestudy.data.model.Movie
 import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
 import com.lutawav.architecturestudy.ui.BaseViewModel
 import com.lutawav.architecturestudy.ui.ViewType
@@ -16,9 +17,10 @@ class ImageViewModel(
 ) : BaseViewModel<Image>(repository) {
 
     override val _data: MutableLiveData<List<Image>> = MutableLiveData()
+    private val _isLoading = MutableLiveData(false)
 
-    val data: LiveData<List<Image>>
-        get() = _data
+    val data: LiveData<List<Image>> get() = _data
+    val isLoading: LiveData<Boolean> get() = _isLoading
 
     val viewType = Transformations.map(data) { list ->
         if (list.isNotEmpty()) {
@@ -31,6 +33,8 @@ class ImageViewModel(
     override fun init() {
         repository.getLatestImageResult()
             .compose(singleIoMainThread())
+            .doOnSubscribe { _isLoading.value = true }
+            .doAfterTerminate { _isLoading.value = false }
             .subscribe({
                 keyword.value = it.keyword
                 _data.value = it.images
@@ -46,6 +50,8 @@ class ImageViewModel(
             keyword = keyword
         )
             .compose(singleIoMainThread())
+            .doOnSubscribe { _isLoading.value = true }
+            .doAfterTerminate { _isLoading.value = false}
             .subscribe({ imageRepo ->
                 _data.value = imageRepo.images
             }, { e ->

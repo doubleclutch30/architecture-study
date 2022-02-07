@@ -56,7 +56,6 @@ abstract class BaseFragment<T : ViewDataBinding, VM : BaseViewModel<*>>(
                 }
             }
         })
-
     }
 
     private fun showErrorMessage(message: String) {
