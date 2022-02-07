@@ -3,9 +3,8 @@ package com.lutawav.architecturestudy.ui
 import android.view.View
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBinding
 
-abstract class BaseAdapter<T, H: BaseViewHolder<T>>
+abstract class BaseAdapter<T, H : BaseViewHolder<T>>
     : RecyclerView.Adapter<H>() {
     private val items: MutableList<T> = mutableListOf()
 

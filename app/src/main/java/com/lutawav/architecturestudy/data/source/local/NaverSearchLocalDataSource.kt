@@ -5,17 +5,19 @@ import com.lutawav.architecturestudy.data.database.SearchHistoryDatabase
 import com.lutawav.architecturestudy.data.database.entity.BlogEntity
 import com.lutawav.architecturestudy.data.database.entity.ImageEntity
 import com.lutawav.architecturestudy.data.database.entity.MovieEntity
-import com.lutawav.architecturestudy.data.model.*
+import com.lutawav.architecturestudy.data.model.BlogLocalData
+import com.lutawav.architecturestudy.data.model.ImageLocalData
+import com.lutawav.architecturestudy.data.model.MovieLocalData
 import io.reactivex.Single
 
 interface NaverSearchLocalDataSource {
 
     val searchHistoryDatabase: SearchHistoryDatabase
-    val sharedPreferences : SharedPreferences
+    val sharedPreferences: SharedPreferences
 
-    fun getMovie() : Single<MovieLocalData>
-    fun getImage() : Single<ImageLocalData>
-    fun getBlog() : Single<BlogLocalData>
+    fun getMovie(): Single<MovieLocalData>
+    fun getImage(): Single<ImageLocalData>
+    fun getBlog(): Single<BlogLocalData>
 
     fun saveMovieResult(movies: List<MovieEntity>)
     fun saveImageResult(images: List<ImageEntity>)
@@ -29,9 +31,9 @@ interface NaverSearchLocalDataSource {
     fun saveImageKeyword(keyword: String)
     fun saveBlogKeyword(keyword: String)
 
-    fun getLatestMovieKeyword() : String
-    fun getLatestImageKeyword() : String
-    fun getLatestBlogKeyword() : String
+    fun getLatestMovieKeyword(): String
+    fun getLatestImageKeyword(): String
+    fun getLatestBlogKeyword(): String
 
     fun clearMovieKeyword()
     fun clearImageKeyword()

@@ -25,7 +25,7 @@ internal class ImageAdapter : BaseAdapter<Image, ImageViewHolder>() {
 
 internal class ImageViewHolder(
     private val binding: ItemImageBinding
-) : BaseViewHolder<Image>(binding),OnItemClickListener {
+) : BaseViewHolder<Image>(binding), OnItemClickListener {
 
     init {
         binding.click = this

@@ -1,7 +1,6 @@
 package com.lutawav.architecturestudy.ui
 
 import android.view.View
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lutawav.architecturestudy.data.repository.NaverSearchRepository

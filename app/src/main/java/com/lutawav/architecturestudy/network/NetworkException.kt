@@ -28,7 +28,6 @@ class NetworkException(
             return null
         }
     }
-
 }
 
 data class NaverErrorBody(

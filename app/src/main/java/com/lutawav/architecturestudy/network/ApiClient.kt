@@ -56,6 +56,4 @@ object ApiClient {
             return response
         }
     }
-
-
 }

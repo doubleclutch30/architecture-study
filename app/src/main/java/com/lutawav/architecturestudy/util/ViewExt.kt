@@ -3,10 +3,7 @@ package com.lutawav.architecturestudy.util
 import android.content.Context
 import android.content.Intent
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
-import androidx.databinding.BindingAdapter
 import com.lutawav.architecturestudy.ui.WebViewActivity
 import com.lutawav.architecturestudy.ui.WebViewActivity.Companion.EXTRA_URL
 

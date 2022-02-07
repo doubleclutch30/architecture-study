@@ -38,4 +38,3 @@ fun RecyclerView.setItems(items: List<Any>?) {
         items?.let { setData(it) }
     }
 }
-

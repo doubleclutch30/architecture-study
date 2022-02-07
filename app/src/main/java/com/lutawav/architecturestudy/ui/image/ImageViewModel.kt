@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.lutawav.architecturestudy.data.model.Image
-import com.lutawav.architecturestudy.data.model.Movie
 import com.lutawav.architecturestudy.data.repository.NaverSearchRepositoryImpl
 import com.lutawav.architecturestudy.ui.BaseViewModel
 import com.lutawav.architecturestudy.ui.ViewType
@@ -51,7 +50,7 @@ class ImageViewModel(
         )
             .compose(singleIoMainThread())
             .doOnSubscribe { _isLoading.value = true }
-            .doAfterTerminate { _isLoading.value = false}
+            .doAfterTerminate { _isLoading.value = false }
             .subscribe({ imageRepo ->
                 _data.value = imageRepo.images
             }, { e ->

@@ -7,7 +7,9 @@ import com.lutawav.architecturestudy.data.database.SearchHistoryDatabase
 import com.lutawav.architecturestudy.data.database.entity.BlogEntity
 import com.lutawav.architecturestudy.data.database.entity.ImageEntity
 import com.lutawav.architecturestudy.data.database.entity.MovieEntity
-import com.lutawav.architecturestudy.data.model.*
+import com.lutawav.architecturestudy.data.model.BlogLocalData
+import com.lutawav.architecturestudy.data.model.ImageLocalData
+import com.lutawav.architecturestudy.data.model.MovieLocalData
 import com.lutawav.architecturestudy.data.source.local.NaverSearchLocalDataSource.Companion.PREFS_KEY_BLOG
 import com.lutawav.architecturestudy.data.source.local.NaverSearchLocalDataSource.Companion.PREFS_KEY_IMAGE
 import com.lutawav.architecturestudy.data.source.local.NaverSearchLocalDataSource.Companion.PREFS_KEY_MOVIE
@@ -31,7 +33,7 @@ object NaverSearchLocalDataSourceImpl : NaverSearchLocalDataSource {
         searchHistoryDatabase.movieDao()
             .getAll()
             .map {
-               MovieLocalData(it)
+                MovieLocalData(it)
             }
 
     override fun getImage(): Single<ImageLocalData> =

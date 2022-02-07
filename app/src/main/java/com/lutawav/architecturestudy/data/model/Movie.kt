@@ -3,7 +3,7 @@ package com.lutawav.architecturestudy.data.model
 import com.google.gson.annotations.SerializedName
 import com.lutawav.architecturestudy.data.database.entity.MovieEntity
 
-data class Movie (
+data class Movie(
     val title: String,
     val link: String,
     val image: String,
