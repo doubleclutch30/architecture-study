@@ -23,13 +23,6 @@ abstract class BaseFragment<T : ViewDataBinding, VM : BaseViewModel<*>>(
 
     abstract val viewModel: VM
 
-    val naverSearchRepository by lazy {
-        NaverSearchRepositoryImpl(
-            naverSearchRemoteDataSource = NaverSearchRemoteDataSourceImpl,
-            naverSearchLocalDataSource = NaverSearchLocalDataSourceImpl
-        )
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {

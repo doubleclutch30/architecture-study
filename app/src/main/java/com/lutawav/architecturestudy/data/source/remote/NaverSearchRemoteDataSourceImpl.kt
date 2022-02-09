@@ -6,20 +6,22 @@ import com.lutawav.architecturestudy.data.model.ResponseMovie
 import com.lutawav.architecturestudy.network.NaverApi
 import io.reactivex.Single
 
-object NaverSearchRemoteDataSourceImpl : NaverSearchRemoteDataSource {
+class NaverSearchRemoteDataSourceImpl(
+    private val naverApi: NaverApi
+) : NaverSearchRemoteDataSource {
 
     override fun getMovie(
         keyword: String
     ): Single<ResponseMovie> =
-        NaverApi.getMovie(keyword)
+        naverApi.getMovie(keyword)
 
     override fun getBlog(
         keyword: String
     ): Single<ResponseBlog> =
-        NaverApi.getBlog(keyword)
+        naverApi.getBlog(keyword)
 
     override fun getImage(
         keyword: String
     ): Single<ResponseImage> =
-        NaverApi.getImage(keyword)
+        naverApi.getImage(keyword)
 }

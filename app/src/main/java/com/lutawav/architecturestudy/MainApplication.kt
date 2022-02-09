@@ -1,7 +1,8 @@
 package com.lutawav.architecturestudy
 
 import android.app.Application
-import com.lutawav.architecturestudy.di.appModule
+import com.lutawav.architecturestudy.module.apiModule
+import com.lutawav.architecturestudy.module.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -11,7 +12,6 @@ class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        instance = this
 
         startKoin {
             androidLogger(
@@ -22,13 +22,9 @@ class MainApplication : Application() {
                 }
             )
             androidContext(this@MainApplication)
-            modules(appModule)
+            modules(
+                apiModule,
+            )
         }
-    }
-
-
-    companion object {
-        lateinit var instance: MainApplication
-            private set
     }
 }

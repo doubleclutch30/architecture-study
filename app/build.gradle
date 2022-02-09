@@ -41,7 +41,6 @@ android {
 dependencies {
     def nav_version = "2.3.5"
     def viewpager2_version = "1.0.0"
-    def koin_version = "2.2.2"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.0'
@@ -79,7 +78,8 @@ dependencies {
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
 
     // koin
-    implementation "io.insert-koin:koin-android:$koin_version"
+    implementation "org.koin:koin-androidx-viewmodel:2.2.2"
+
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
