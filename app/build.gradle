@@ -39,16 +39,15 @@ android {
 }
 
 dependencies {
-    def fragment_version = "2.3.5"
     def nav_version = "2.3.5"
     def viewpager2_version = "1.0.0"
+    def koin_version = "2.2.2"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation "androidx.viewpager2:viewpager2:$viewpager2_version"
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
-//    implementation "androidx.fragment:fragment-ktx:$fragment_version"
 
     // Jetpack Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -78,6 +77,9 @@ dependencies {
 
     // db test
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
+
+    // koin
+    implementation "io.insert-koin:koin-android:$koin_version"
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
