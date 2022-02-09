@@ -41,9 +41,11 @@ android {
 dependencies {
     def fragment_version = "2.3.5"
     def nav_version = "2.3.5"
+    def viewpager2_version = "1.0.0"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.0'
+    implementation "androidx.viewpager2:viewpager2:$viewpager2_version"
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
 //    implementation "androidx.fragment:fragment-ktx:$fragment_version"
@@ -72,7 +74,7 @@ dependencies {
     kapt "androidx.room:room-compiler:2.4.1"
 
     // extensions
-    implementation "androidx.lifecycle:lifecycle-extensions:2.1.0"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
 
     // db test
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
