@@ -1,9 +1,11 @@
 package com.lutawav.architecturestudy.ui
 
 import android.view.View
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lutawav.architecturestudy.data.repository.NaverSearchRepository
+import com.lutawav.architecturestudy.util.SingleLiveEvent
 import com.lutawav.architecturestudy.util.hideKeyboard
 import com.lutawav.architecturestudy.util.then
 import io.reactivex.disposables.CompositeDisposable
@@ -11,9 +13,14 @@ import io.reactivex.disposables.CompositeDisposable
 abstract class BaseViewModel<T>(
     protected open val repository: NaverSearchRepository
 ) : ViewModel() {
-    val errorMsg = MutableLiveData<String>()
     val keyword = MutableLiveData<String>()
-    val invalidKeyword = MutableLiveData<Boolean>()
+
+    protected val _errorMsg = SingleLiveEvent<String>()
+    private val _invalidKeyword = SingleLiveEvent<Boolean>()
+
+    val errorMsg: LiveData<String> get() = _errorMsg
+    val invalidKeyword: LiveData<Boolean> get() = _invalidKeyword
+
     protected val compositeDisposable = CompositeDisposable()
 
     private val debounceTime: Long = 600L
@@ -30,7 +37,7 @@ abstract class BaseViewModel<T>(
             return
         }
 
-        invalidKeyword.value = keyword.isBlank()
+        _invalidKeyword.value = keyword.isBlank()
         keyword.isNotBlank().then {
             v.hideKeyboard()
             search(keyword)
@@ -41,7 +48,6 @@ abstract class BaseViewModel<T>(
         super.onCleared()
         compositeDisposable.clear()
     }
-
 }
 
 enum class ViewType(type: Int) {

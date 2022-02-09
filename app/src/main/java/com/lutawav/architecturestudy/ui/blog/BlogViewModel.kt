@@ -40,7 +40,7 @@ class BlogViewModel(
                 _data.value = it.blogs
             }, { e ->
                 val message = e.message ?: return@subscribe
-                Log.e("blog", message)
+                _errorMsg.value = message
             })
             .addTo(compositeDisposable)
     }
@@ -56,7 +56,7 @@ class BlogViewModel(
                 _data.value = blogRepo.blogs
             }, { e ->
                 val message = e.message ?: return@subscribe
-                errorMsg.value = message
+                _errorMsg.value = message
             })
             .addTo(compositeDisposable)
     }

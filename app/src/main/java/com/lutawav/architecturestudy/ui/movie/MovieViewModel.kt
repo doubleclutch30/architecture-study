@@ -1,6 +1,5 @@
 package com.lutawav.architecturestudy.ui.movie
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -39,7 +38,8 @@ class MovieViewModel(
                 _data.value = it.movies
             }, { e ->
                 val message = e.message ?: return@subscribe
-                Log.e("movie", message)
+                _errorMsg.value = message
+
             })
             .addTo(compositeDisposable)
 
@@ -57,7 +57,7 @@ class MovieViewModel(
 
             }, { e ->
                 val message = e.message ?: return@subscribe
-                errorMsg.value = message
+                _errorMsg.value = message
             })
             .addTo(compositeDisposable)
     }

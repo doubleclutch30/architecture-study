@@ -2,6 +2,9 @@ package com.lutawav.architecturestudy.ui.blog
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,19 +15,21 @@ import com.lutawav.architecturestudy.ui.BaseFragment
 
 class BlogFragment : BaseFragment<FragmentBlogBinding, BlogViewModel>(R.layout.fragment_blog) {
 
-    override val viewModel: BlogViewModel by lazy {
-        BlogViewModel(naverSearchRepository)
+    override val viewModel: BlogViewModel by viewModels {
+        object : ViewModelProvider.Factory{
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return BlogViewModel(naverSearchRepository) as T
+            }
+        }
     }
+
     private lateinit var blogAdapter: BlogAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initViews()
-    }
-
-    private fun initViews() {
         blogAdapter = BlogAdapter()
+
         binding.blogRecyclerView.apply {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             adapter = blogAdapter
@@ -34,6 +39,7 @@ class BlogFragment : BaseFragment<FragmentBlogBinding, BlogViewModel>(R.layout.f
 
         binding.vm = viewModel
         binding.lifecycleOwner = this
+
         viewModel.init()
     }
 

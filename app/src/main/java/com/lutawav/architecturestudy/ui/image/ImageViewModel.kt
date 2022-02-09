@@ -39,7 +39,7 @@ class ImageViewModel(
                 _data.value = it.images
             }, { e ->
                 val message = e.message ?: return@subscribe
-                Log.e("image", message)
+                _errorMsg.value = message
             })
             .addTo(compositeDisposable)
     }
@@ -55,7 +55,7 @@ class ImageViewModel(
                 _data.value = imageRepo.images
             }, { e ->
                 val message = e.message ?: return@subscribe
-                errorMsg.value = message
+                _errorMsg.value = message
             })
             .addTo(compositeDisposable)
     }

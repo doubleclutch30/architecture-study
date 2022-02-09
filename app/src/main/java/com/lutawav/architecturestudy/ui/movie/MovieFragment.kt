@@ -2,6 +2,9 @@ package com.lutawav.architecturestudy.ui.movie
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,20 +15,20 @@ import com.lutawav.architecturestudy.ui.BaseFragment
 
 class MovieFragment : BaseFragment<FragmentMovieBinding, MovieViewModel>(R.layout.fragment_movie) {
 
-    override val viewModel: MovieViewModel by lazy {
-        MovieViewModel(naverSearchRepository)
+    override val viewModel: MovieViewModel by viewModels {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return MovieViewModel(naverSearchRepository) as T
+            }
+        }
     }
 
     private lateinit var movieAdapter: MovieAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        initViews()
-    }
-
-    private fun initViews() {
         movieAdapter = MovieAdapter()
+
         binding.movieRecyclerView.apply {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             adapter = movieAdapter
@@ -35,6 +38,7 @@ class MovieFragment : BaseFragment<FragmentMovieBinding, MovieViewModel>(R.layou
 
         binding.vm = viewModel
         binding.lifecycleOwner = this
+
         viewModel.init()
     }
 
