@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/WorkSpace/AndroidStudy/ToyProject/architecture-study/app/src/main/res/drawable/ic_baseline_blog_24.xml" value="0.26979166666666665" />
+        <entry key="..\:/WorkSpace/AndroidStudy/ToyProject/architecture-study/app/src/main/res/drawable/ic_baseline_image_24.xml" value="0.26979166666666665" />
+        <entry key="..\:/WorkSpace/AndroidStudy/ToyProject/architecture-study/app/src/main/res/drawable/ic_baseline_movie_24.xml" value="0.26979166666666665" />
         <entry key="..\:/WorkSpace/AndroidStudy/ToyProject/architecture-study/app/src/main/res/drawable/selector_menu_color.xml" value="0.26979166666666665" />
         <entry key="..\:/WorkSpace/AndroidStudy/ToyProject/architecture-study/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/WorkSpace/AndroidStudy/ToyProject/architecture-study/app/src/main/res/layout/activity_webview.xml" value="0.1296875" />
