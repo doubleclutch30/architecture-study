@@ -22,22 +22,4 @@ abstract class SearchHistoryDatabase : RoomDatabase() {
     abstract fun blogDao(): BlogDao
 
     abstract fun imageDao(): ImageDao
-
-    companion object {
-        @Volatile
-        private var INSTANCE: SearchHistoryDatabase? = null
-
-        fun getInstance(context: Context): SearchHistoryDatabase =
-            INSTANCE ?: synchronized(this) {
-                buildDatabase(context).also { INSTANCE = it }
-            }
-
-        private fun buildDatabase(context: Context) =
-            Room.databaseBuilder(
-                context.applicationContext,
-                SearchHistoryDatabase::class.java,
-                "search_history.db"
-            )
-                .build()
-    }
 }
