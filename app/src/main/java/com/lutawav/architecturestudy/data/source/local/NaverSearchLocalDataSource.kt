@@ -12,9 +12,6 @@ import io.reactivex.Single
 
 interface NaverSearchLocalDataSource {
 
-    val searchHistoryDatabase: SearchHistoryDatabase
-    val sharedPreferences: SharedPreferences
-
     fun getMovie(): Single<MovieLocalData>
     fun getImage(): Single<ImageLocalData>
     fun getBlog(): Single<BlogLocalData>
