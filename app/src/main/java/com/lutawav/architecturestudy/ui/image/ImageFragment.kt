@@ -2,25 +2,17 @@ package com.lutawav.architecturestudy.ui.image
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.lutawav.architecturestudy.R
 import com.lutawav.architecturestudy.databinding.FragmentImageBinding
 import com.lutawav.architecturestudy.ui.BaseFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ImageFragment : BaseFragment<FragmentImageBinding, ImageViewModel>(R.layout.fragment_image) {
 
-    override val viewModel: ImageViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return ImageViewModel(naverSearchRepository) as T
-            }
-        }
-    }
+    override val viewModel: ImageViewModel by viewModel()
 
     private lateinit var imageAdapter: ImageAdapter
 
