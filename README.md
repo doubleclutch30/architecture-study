@@ -1,12 +1,10 @@
 # architecture-study
-1. Repository 구조
 
-2. MVP (Model View Presenter) 구조로 변경
-
-3. 데이터바인딩 (Databinding) 적용
-
-[5주차] MVVM 구조로 변경
-
-[6주차] AAC ViewModel, LiveData 적용
-
-[7주차] DI(Dependency Injection) -KOIN- 적용
+1. Repository
+2. MVP (Model View Presenter)
+3. RxJava
+4. Room
+5. DataBinding
+6. MVVM(Model-View-ViewModel)
+7. AAC(ViewModel, LiveData)
+8. Koin
