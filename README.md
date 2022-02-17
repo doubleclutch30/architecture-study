@@ -1,13 +1,12 @@
 # architecture-study
-Android Kotlin MVVM
-This is a demo application for Kotlin, ACC, MVVM-Pattern, etc.
+1. Repository 구조
 
-Libraries
-Kotlin
-ACC(ViewModel, LiveData, Room)
-MVVM(Model-View-ViewModel) Pattern
-Databinding
-Retrofit2
-Coroutine
-Koin
-Glide
+2. MVP (Model View Presenter) 구조로 변경
+
+3. 데이터바인딩 (Databinding) 적용
+
+[5주차] MVVM 구조로 변경
+
+[6주차] AAC ViewModel, LiveData 적용
+
+[7주차] DI(Dependency Injection) -KOIN- 적용
