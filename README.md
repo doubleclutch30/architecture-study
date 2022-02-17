@@ -1,4 +1,4 @@
-# architecture-study
+# android-architecture-stud
 
 1. Repository
 2. MVP (Model View Presenter)
